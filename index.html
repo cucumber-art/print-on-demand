@@ -1,0 +1,863 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="googlebot" content="noindex, nofollow">
+<meta name="yandex" content="none">
+</head>
+<body style="margin:0">
+<title>Print on Demand</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Golos+Text:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --paper:#FAF8F7; --surface:#FFFFFF; --surface-2:#F2EEEF; --surface-3:#E7E1E4;
+  --ink:#16141A; --ink-2:#4A444E; --ink-3:#7C7480;
+  --line:#DED7DB; --line-2:#C6BCC2;
+  --accent:#B82A63; --accent-soft:#FBE8F0; --accent-line:#E9A7C3;
+  --cyan:#12667F; --cyan-soft:#E2F0F4;
+  --ok:#2C6E4C; --ok-soft:#E3F1E8;
+  --warn:#8F5C0E; --warn-soft:#FAF0DA;
+  --bad:#A32F26; --bad-soft:#FAE6E3;
+  --shadow:0 1px 2px rgba(22,20,26,.05), 0 10px 28px -16px rgba(22,20,26,.35);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#131116; --surface:#1B181F; --surface-2:#242029; --surface-3:#2E2934;
+    --ink:#F2EEF1; --ink-2:#BCB3BC; --ink-3:#8B8290;
+    --line:#332D38; --line-2:#473F4D;
+    --accent:#F2699C; --accent-soft:#3A1B2A; --accent-line:#7A3654;
+    --cyan:#67C3DC; --cyan-soft:#12303A;
+    --ok:#7FCFA3; --ok-soft:#16301F;
+    --warn:#E0AC5C; --warn-soft:#33260F;
+    --bad:#F0897E; --bad-soft:#361A16;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -16px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#131116; --surface:#1B181F; --surface-2:#242029; --surface-3:#2E2934;
+  --ink:#F2EEF1; --ink-2:#BCB3BC; --ink-3:#8B8290;
+  --line:#332D38; --line-2:#473F4D;
+  --accent:#F2699C; --accent-soft:#3A1B2A; --accent-line:#7A3654;
+  --cyan:#67C3DC; --cyan-soft:#12303A;
+  --ok:#7FCFA3; --ok-soft:#16301F;
+  --warn:#E0AC5C; --warn-soft:#33260F;
+  --bad:#F0897E; --bad-soft:#361A16;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -16px rgba(0,0,0,.8);
+}
+
+*{box-sizing:border-box}
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:"Golos Text","Helvetica Neue",Arial,sans-serif;
+  font-size:15px; line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px 96px}
+h1,h2,h3{font-family:Unbounded,"Golos Text",sans-serif;text-wrap:balance;margin:0}
+h1{font-weight:700;font-size:clamp(30px,4.4vw,46px);line-height:1.08;letter-spacing:-.02em}
+h2{font-weight:600;font-size:clamp(21px,2.6vw,27px);line-height:1.18;letter-spacing:-.01em}
+h3{font-weight:500;font-size:17px;line-height:1.3}
+p{margin:0}
+.eyebrow{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);
+}
+
+/* header */
+header{padding:56px 0 34px;border-bottom:1px solid var(--line)}
+.head-grid{display:grid;gap:26px;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);align-items:end}
+@media(max-width:820px){.head-grid{grid-template-columns:1fr}}
+.lede{color:var(--ink-2);font-size:16.5px;max-width:62ch;margin-top:14px}
+.facts{display:flex;flex-wrap:wrap;gap:8px}
+.fact{
+  background:var(--surface);border:1px solid var(--line);border-radius:8px;
+  padding:9px 12px;font-size:12.5px;color:var(--ink-2);
+}
+.fact b{color:var(--ink);font-weight:600}
+
+/* tabs */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:34px 0 0;position:sticky;top:0;z-index:20;
+  background:var(--paper);padding:12px 0;border-bottom:1px solid var(--line)}
+.tab{
+  font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.06em;
+  background:var(--surface);color:var(--ink-2);border:1px solid var(--line);
+  padding:9px 14px;border-radius:7px;cursor:pointer;transition:.15s;
+}
+.tab:hover{border-color:var(--line-2);color:var(--ink)}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.tab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+section.panel{padding-top:38px}
+.intro{display:grid;gap:22px;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);align-items:start;margin-bottom:34px}
+@media(max-width:820px){.intro{grid-template-columns:1fr}}
+.intro p{color:var(--ink-2);max-width:66ch}
+.note{
+  background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--accent);
+  border-radius:0 8px 8px 0;padding:14px 16px;font-size:13.5px;color:var(--ink-2);
+}
+.note b{color:var(--ink)}
+
+/* screens rail */
+.rail{
+  display:flex;gap:18px;overflow-x:auto;padding:6px 4px 22px;
+  scroll-snap-type:x proximity;
+}
+.rail::-webkit-scrollbar{height:9px}
+.rail::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:9px}
+.step{flex:0 0 264px;scroll-snap-align:start;display:flex;flex-direction:column;gap:10px}
+.step-head{display:flex;align-items:baseline;gap:8px}
+.step-n{
+  font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:500;
+  color:var(--paper);background:var(--ink);border-radius:5px;padding:2px 6px;
+}
+.step.key .step-n{background:var(--accent);color:#fff}
+:root[data-theme="dark"] .step.key .step-n,
+.step.key .step-n{color:var(--surface)}
+.step-t{font-size:13.5px;font-weight:600;line-height:1.25}
+.step-sub{font-size:12px;color:var(--ink-3);line-height:1.4;min-height:2.8em}
+
+.phone{
+  background:var(--surface);border:1px solid var(--line-2);border-radius:14px;
+  box-shadow:var(--shadow);overflow:hidden;height:452px;display:flex;flex-direction:column;
+}
+.step.key .phone{border-color:var(--accent-line);box-shadow:0 0 0 3px var(--accent-soft),var(--shadow)}
+.chrome{
+  background:var(--surface-2);border-bottom:1px solid var(--line);
+  padding:7px 10px;display:flex;align-items:center;gap:7px;
+  font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--ink-3);
+}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--line-2);flex:none}
+.scr{padding:12px;display:flex;flex-direction:column;gap:9px;overflow:hidden;flex:1}
+.img{background:var(--surface-3);border-radius:6px;display:flex;align-items:center;justify-content:center;
+  color:var(--ink-3);font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.04em}
+.lbl{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.ttl{font-size:12.5px;font-weight:600;line-height:1.3}
+.txt{font-size:11px;color:var(--ink-2);line-height:1.45}
+.price{font-family:Unbounded,sans-serif;font-weight:600;font-size:16px}
+.old{color:var(--ink-3);text-decoration:line-through;font-size:11.5px;font-family:"Golos Text",sans-serif;font-weight:400;margin-left:6px}
+.btn{
+  background:var(--ink);color:var(--paper);border-radius:7px;padding:9px;text-align:center;
+  font-size:11.5px;font-weight:600;
+}
+.btn.pink{background:var(--accent);color:#fff}
+:root[data-theme="dark"] .btn.pink{color:#22101A}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line-2);font-weight:500}
+.row{display:flex;gap:6px}
+.row>*{flex:1}
+.chip{
+  font-size:10px;padding:3px 7px;border-radius:20px;background:var(--surface-2);
+  color:var(--ink-2);border:1px solid var(--line);white-space:nowrap;
+}
+.chip.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.chip.warn{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+.chip.ok{background:var(--ok-soft);color:var(--ok);border-color:transparent}
+.chips{display:flex;gap:5px;flex-wrap:wrap}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.card-mini{border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.card-mini .img{border-radius:0;height:52px}
+.card-mini .m{padding:5px 6px;font-size:9.5px;color:var(--ink-2);line-height:1.3}
+.steps4{display:flex;flex-direction:column;gap:5px}
+.s4{display:flex;gap:6px;align-items:flex-start;font-size:10.5px;color:var(--ink-2);line-height:1.35}
+.s4 i{font-family:"IBM Plex Mono",monospace;font-style:normal;color:var(--accent);font-size:9.5px;padding-top:1px}
+.alert{background:var(--warn-soft);color:var(--warn);border-radius:6px;padding:7px 8px;font-size:10px;line-height:1.4}
+.alert.info{background:var(--cyan-soft);color:var(--cyan)}
+.alert.good{background:var(--ok-soft);color:var(--ok)}
+.tbl-mini{font-size:10px;color:var(--ink-2);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.tbl-mini div{display:flex;justify-content:space-between;padding:4px 7px;border-bottom:1px solid var(--line)}
+.tbl-mini div:last-child{border-bottom:0}
+.msg{max-width:86%;padding:7px 9px;border-radius:9px;font-size:10.5px;line-height:1.4}
+.msg.them{background:var(--surface-2);border:1px solid var(--line);align-self:flex-start;border-bottom-left-radius:3px}
+.msg.me{background:var(--ink);color:var(--paper);align-self:flex-end;border-bottom-right-radius:3px}
+.msg .who{display:block;font-family:"IBM Plex Mono",monospace;font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;opacity:.6;margin-bottom:3px}
+.msg.fix{background:var(--ok-soft);color:var(--ok);border:1px dashed var(--ok);align-self:center;max-width:100%;text-align:center;font-weight:600}
+.chatflow{display:flex;flex-direction:column;gap:6px;flex:1;overflow:hidden}
+.field{border:1px solid var(--line-2);border-radius:6px;padding:7px 8px;font-size:10.5px;color:var(--ink-3);background:var(--surface)}
+.field.filled{color:var(--ink)}
+.drop{border:1px dashed var(--line-2);border-radius:6px;padding:14px 8px;text-align:center;font-size:10.5px;color:var(--ink-3)}
+
+/* CJM */
+.cjm{margin-top:14px;border:1px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden}
+.cjm-head{padding:16px 18px 4px}
+.curve{padding:6px 18px 14px}
+.curve svg{width:100%;height:74px;display:block;overflow:visible}
+.tbl-wrap{overflow-x:auto;border-top:1px solid var(--line)}
+table{border-collapse:collapse;width:100%;min-width:820px;font-size:13px}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{
+  font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-3);font-weight:500;background:var(--surface-2);position:sticky;top:0;
+}
+td:first-child{white-space:nowrap;font-weight:600;font-size:12.5px}
+tbody tr:last-child td{border-bottom:0}
+td .q{color:var(--ink-2);font-style:italic}
+.risk{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.06em;padding:2px 7px;border-radius:5px;white-space:nowrap}
+.r-hi{background:var(--bad-soft);color:var(--bad)}
+.r-md{background:var(--warn-soft);color:var(--warn)}
+.r-lo{background:var(--ok-soft);color:var(--ok)}
+
+.cmp{margin-top:56px}
+.cmp table{min-width:720px}
+.cmp td:first-child{font-weight:500;color:var(--ink-2);font-size:13px;white-space:normal}
+.yes{color:var(--ok);font-weight:600}
+.no{color:var(--bad);font-weight:600}
+
+.blockers{margin-top:52px;display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.blk{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px}
+.blk .eyebrow{color:var(--accent)}
+.blk h3{margin:8px 0 8px}
+.blk p{font-size:13.5px;color:var(--ink-2)}
+/* walkthrough */
+.walk{margin:26px 0 0;border:1px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden}
+.walk-h{padding:16px 18px 2px}
+.walk ol{list-style:none;counter-reset:w;margin:10px 0 0;padding:0 18px 18px}
+.walk li{counter-increment:w;position:relative;padding:12px 0 12px 44px;border-top:1px solid var(--line)}
+.walk li:first-child{border-top:0}
+.walk li::before{
+  content:counter(w,decimal-leading-zero);position:absolute;left:0;top:13px;
+  font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--accent);
+  border:1px solid var(--accent-line);border-radius:5px;padding:1px 5px;background:var(--accent-soft);
+}
+.walk li b{display:block;font-size:14px;margin-bottom:3px}
+.walk li p{font-size:13.5px;color:var(--ink-2);max-width:78ch}
+.walk li .dev{
+  display:inline-block;margin-top:6px;font-family:"IBM Plex Mono",monospace;font-size:10.5px;
+  letter-spacing:.06em;padding:2px 8px;border-radius:5px;background:var(--surface-2);color:var(--ink-3);
+  border:1px solid var(--line);
+}
+.walk li .dev.none{background:var(--ok-soft);color:var(--ok);border-color:transparent}
+.walk li .dev.check{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+footer{margin-top:56px;padding-top:22px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-3)}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="wrap">
+<header>
+  <div class="head-grid">
+    <div>
+      <p class="eyebrow">MVP · маркетплейс · одна категория</p>
+      <h1>Путь покупателя<br>Print on Demand</h1>
+      <p class="lede">Макеты экранов и карта пути для трёх конструкций MVP. Ограничение, из которого растёт всё остальное: <b>DBS-чат открывается только тогда, когда существует заказ</b>, а согласовать макет нужно до заказа футболки.</p>
+    </div>
+    <div class="facts">
+      <div class="fact">SKU — <b>футболка оверсайз</b></div>
+      <div class="fact">Печать — <b>одна зона, перёд</b></div>
+      <div class="fact">Согласование — <b>до оплаты футболки</b></div>
+      <div class="fact">Возврат — <b>только брак</b></div>
+      <div class="fact">Разработка в контуре площадки — <b>нет</b></div>
+    </div>
+  </div>
+</header>
+
+<div class="tabs" role="tablist">
+  <button class="tab" role="tab" aria-selected="true" data-p="a">A · КАРТОЧКА-УСЛУГА</button>
+  <button class="tab" role="tab" aria-selected="false" data-p="b">B · ФОРМА НА ВИТРИНЕ</button>
+  <button class="tab" role="tab" aria-selected="false" data-p="c">C · ЗАКАЗ + НЕЙТРАЛЬНАЯ ОТМЕНА</button>
+</div>
+
+<!-- ================= A ================= -->
+<section class="panel" id="p-a" role="tabpanel">
+  <div class="intro">
+    <div>
+      <h2>Вариант A. Согласование через карточку-услугу</h2>
+      <p style="margin-top:10px">Покупатель оформляет небольшой заказ на услугу «Согласование макета» за 200 ₽, и именно этот заказ открывает DBS-чат. В чате стороны договариваются, селлер возвращает 200 ₽ промокодом, покупатель оформляет обычный заказ на футболку, уже увидев эскиз.</p>
+    </div>
+    <div class="note"><b>Зачем нужна услуга.</b> Это обычная карточка товара, где товар — работа селлера. Единственный способ открыть чат до заказа футболки, ничего не разрабатывая.</div>
+  </div>
+
+  <div class="rail">
+    <!-- 1 -->
+    <div class="step">
+      <div class="step-head"><span class="step-n">01</span><span class="step-t">Лендинг проекта</span></div>
+      <p class="step-sub">Промо-страница внутри маркетплейса: баннер объясняет, что это за сервис.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Промо-страница · Печать на футболках</div>
+        <div class="scr">
+          <div class="img" style="height:104px;flex-direction:column;gap:5px;color:var(--ink-2)">
+            <div style="font-family:Unbounded,sans-serif;font-weight:600;font-size:13px;color:var(--ink)">Ваше фото на футболке</div>
+            <div style="font-size:10px">Покажем макет до того, как вы заплатите за вещь</div>
+            <div style="font-size:9px;font-family:'IBM Plex Mono',monospace;letter-spacing:.08em">БАННЕР ПРОЕКТА</div>
+          </div>
+          <div class="steps4">
+            <div class="s4"><i>1</i>Заказываете согласование макета — 200 ₽</div>
+            <div class="s4"><i>2</i>Присылаете фото, получаете эскиз</div>
+            <div class="s4"><i>3</i>Заказываете футболку, 200 ₽ возвращаются</div>
+          </div>
+          <div class="chips"><span class="chip on">Все</span><span class="chip">Фото</span><span class="chip">Надпись</span><span class="chip">К празднику</span></div>
+          <div class="grid2">
+            <div class="card-mini"><div class="img">фото работы</div><div class="m">Оверсайз, белая<br><b>1490 ₽</b></div></div>
+            <div class="card-mini"><div class="img">фото работы</div><div class="m">Оверсайз, чёрная<br><b>1490 ₽</b></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 2 -->
+    <div class="step">
+      <div class="step-head"><span class="step-n">02</span><span class="step-t">Карточка футболки</span></div>
+      <p class="step-sub">Обычная карточка — её видно и из общего поиска. Новых кнопок нет.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Карточка товара · из поиска или с лендинга</div>
+        <div class="scr">
+          <div class="img" style="height:80px;flex-direction:column;gap:3px">
+            <div style="font-size:9.5px;color:var(--ink-2)">1-е фото галереи — инфографика</div>
+            <div style="font-size:9px">«Как заказать: 4 шага»</div>
+          </div>
+          <div class="ttl">Футболка оверсайз с вашим принтом</div>
+          <div class="price">1490 ₽</div>
+          <div class="lbl">Описание</div>
+          <div class="steps4">
+            <div class="s4"><i>1</i>Закажите «Согласование макета» — карточка ниже</div>
+            <div class="s4"><i>2</i>Пришлите фото в чат по этому заказу</div>
+            <div class="s4"><i>3</i>Получите эскиз и промокод на 200 ₽</div>
+            <div class="s4"><i>4</i>Вернитесь сюда и закажите футболку</div>
+          </div>
+          <div class="lbl">Товары продавца</div>
+          <div class="card-mini" style="display:flex;align-items:center;gap:7px;padding:5px">
+            <div class="img" style="height:34px;width:34px;flex:none;border-radius:5px">услуга</div>
+            <div class="m" style="padding:0">Согласование макета<br><b>200 ₽</b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 3 -->
+    <div class="step">
+      <div class="step-head"><span class="step-n">03</span><span class="step-t">Карточка услуги</span></div>
+      <p class="step-sub">Тот же селлер, второй SKU. Продаётся работа, а не вещь.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Карточка товара</div>
+        <div class="scr">
+          <div class="img" style="height:62px">пример эскиза</div>
+          <div class="ttl">Согласование макета для футболки</div>
+          <div class="price">200 ₽</div>
+          <div class="txt">Пришлите фото или идею — сделаем макет и покажем, как футболка будет выглядеть. Ответ в течение дня.</div>
+          <div class="alert good">200 ₽ вернутся промокодом, если закажете футболку.</div>
+          <div class="tbl-mini">
+            <div><span>Ответ селлера</span><b>до 24 часов</b></div>
+            <div><span>Правок макета</span><b>без ограничений</b></div>
+          </div>
+          <div class="btn">В корзину</div>
+        </div>
+      </div>
+    </div>
+    <!-- 4 -->
+    <div class="step">
+      <div class="step-head"><span class="step-n">04</span><span class="step-t">Корзина и оплата услуги</span></div>
+      <p class="step-sub">Обычная корзина, обычная оплата. Ничего нового.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Корзина</div>
+        <div class="scr">
+          <div class="row" style="gap:8px;align-items:center">
+            <div class="img" style="height:46px;flex:0 0 46px">услуга</div>
+            <div style="flex:1"><div class="ttl">Согласование макета</div><div class="txt">PRINT.LAB</div></div>
+          </div>
+          <div class="tbl-mini">
+            <div><span>Услуга</span><b>200 ₽</b></div>
+            <div><span>Итого</span><b>200 ₽</b></div>
+          </div>
+          <div class="alert info">После оплаты откроется чат с продавцом — там вы пришлёте фото.</div>
+          <div class="btn pink">Оплатить 200 ₽</div>
+        </div>
+      </div>
+    </div>
+    <!-- 5 -->
+    <div class="step key">
+      <div class="step-head"><span class="step-n">05</span><span class="step-t">Заказ создан → чат открыт</span></div>
+      <p class="step-sub">Ключевой момент: появился заказ — появился DBS-чат.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Заказ № 4471-2290</div>
+        <div class="scr">
+          <div class="alert good">Оплачено 200 ₽</div>
+          <div class="ttl">Согласование макета</div>
+          <div class="tbl-mini">
+            <div><span>Статус</span><b>Ждём ваши материалы</b></div>
+            <div><span>Продавец</span><b>PRINT.LAB</b></div>
+            <div><span>Ответит</span><b>до 24 часов</b></div>
+          </div>
+          <div class="alert info">Напишите продавцу первым: приложите фото, размер и замер по груди.</div>
+          <div class="btn pink">Открыть чат с продавцом</div>
+        </div>
+      </div>
+    </div>
+    <!-- 6 -->
+    <div class="step key">
+      <div class="step-head"><span class="step-n">06</span><span class="step-t">Согласование в DBS-чате</span></div>
+      <p class="step-sub">Эскиз, размер, фиксирующая фраза продавца.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Чат · PRINT.LAB</div>
+        <div class="scr">
+          <div class="chatflow">
+            <div class="msg them"><span class="who">Продавец</span>Здравствуйте! Пришлите фото или идею, размер, который носите, и замер по груди вашей футболки.</div>
+            <div class="msg me"><span class="who">Вы</span>Фото кота, надпись «БОСС». M, по груди 52 см</div>
+            <div class="msg them"><span class="who">Продавец</span>Вот эскиз. По замеру 52 см советую L — оверсайз.<div class="img" style="height:50px;margin-top:5px">эскиз на футболке</div></div>
+            <div class="msg me"><span class="who">Вы</span>Согласовано, беру L</div>
+            <div class="msg fix">Макет согласован, версия от 15.09</div>
+          </div>
+          <div class="field">Сообщение…</div>
+        </div>
+      </div>
+    </div>
+    <!-- 7 -->
+    <div class="step">
+      <div class="step-head"><span class="step-n">07</span><span class="step-t">Промокод и ссылка</span></div>
+      <p class="step-sub">Селлер закрывает услугу и возвращает её стоимость.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Чат · PRINT.LAB</div>
+        <div class="scr">
+          <div class="chatflow">
+            <div class="msg them"><span class="who">Продавец</span>Промокод на 200 ₽ — <b>MAKET200</b>. Ссылка на футболку ниже, размер L.</div>
+            <div class="msg them" style="padding:0;overflow:hidden;max-width:100%">
+              <div class="img" style="height:52px;border-radius:0">карточка футболки</div>
+              <div style="padding:7px 9px;font-size:10.5px">Футболка оверсайз, L · 1490 ₽</div>
+            </div>
+          </div>
+          <div class="alert good">Промокод применится в корзине</div>
+          <div class="btn pink">Перейти к футболке</div>
+        </div>
+      </div>
+    </div>
+    <!-- 8 -->
+    <div class="step">
+      <div class="step-head"><span class="step-n">08</span><span class="step-t">Заказ футболки</span></div>
+      <p class="step-sub">Возврат в ту же карточку, размер уже известен. Обычная корзина.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Корзина</div>
+        <div class="scr">
+          <div class="row" style="gap:8px;align-items:center">
+            <div class="img" style="height:50px;flex:0 0 50px">фото</div>
+            <div style="flex:1"><div class="ttl">Футболка оверсайз, L</div><div class="txt">Макет от 15.09 · PRINT.LAB</div></div>
+          </div>
+          <div class="field filled">Промокод: MAKET200</div>
+          <div class="tbl-mini">
+            <div><span>Футболка</span><b>1490 ₽</b></div>
+            <div><span>Промокод</span><b>−200 ₽</b></div>
+            <div><span>Изготовление</span><b>3–5 дней</b></div>
+          </div>
+          <div class="price">1290 ₽<span class="old">1490 ₽</span></div>
+          <div class="alert">Печатаем по согласованному макету. Возврат — только при браке.</div>
+          <div class="btn pink">Оплатить</div>
+        </div>
+      </div>
+    </div>
+    <!-- 9 -->
+    <div class="step">
+      <div class="step-head"><span class="step-n">09</span><span class="step-t">Производство и выдача</span></div>
+      <p class="step-sub">Дальше — стандартная логистика площадки.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Заказ № 4471-2318</div>
+        <div class="scr">
+          <div class="steps4">
+            <div class="s4"><i>✓</i>Оплачен</div>
+            <div class="s4"><i>✓</i>Передан в работу</div>
+            <div class="s4"><i>●</i>Печатается</div>
+            <div class="s4"><i>○</i>Передан в доставку</div>
+            <div class="s4"><i>○</i>Готов к выдаче</div>
+          </div>
+          <div class="img" style="height:58px">согласованный макет</div>
+          <div class="alert info">Придёт с браком или не совпадёт с макетом — оформим возврат.</div>
+          <div class="btn ghost">Открыть чат по заказу</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="walk">
+    <div class="walk-h">
+      <p class="eyebrow">Шаги подробно · вариант A</p>
+      <h3 style="margin-top:6px">Что происходит на каждом шаге и что для этого нужно построить</h3>
+    </div>
+    <ol>
+      <li><b>Лендинг проекта</b><p>Промо-страница внутри маркетплейса с баннером: что за сервис, три шага пути, подборка футболок участвующих селлеров. Лендинг — точка входа и место для трафика из пушей и рассылок, но не единственная: карточки живут и в обычном поиске.</p><span class="dev none">без разработки · промо-страница</span></li>
+      <li><b>Карточка футболки</b><p>Обычная карточка товара. Никакой новой кнопки в ней нет — её нельзя добавить без разработки, а карточка открывается и из общего поиска, где лендинга рядом нет. Поэтому инструкция встроена в саму карточку тремя способами: первое фото галереи — инфографика «как заказать в 4 шага»; описание повторяет шаги текстом; блок товаров продавца ведёт на карточку услуги.</p><span class="dev none">без разработки · контент карточки</span></li>
+      <li><b>Карточка услуги «Согласование макета», 200 ₽</b><p>Второй SKU того же селлера. Кнопка обычная — «В корзину». В описании: что прислать, за сколько ответят, что 200 ₽ вернутся промокодом.</p><span class="dev check">проверить · допустима ли карточка-услуга без отгрузки</span></li>
+      <li><b>Корзина и оплата 200 ₽</b><p>Стандартная корзина площадки, стандартная оплата. На этом шаге покупатель платит впервые — и это самое узкое место всего варианта.</p><span class="dev none">без разработки</span></li>
+      <li><b>Заказ создан — открывается DBS-чат</b><p>Ровно то, ради чего вся конструкция. Заказ существует → чат доступен. В карточке заказа покупатель видит статус «ждём ваши материалы» и кнопку в чат.</p><span class="dev check">проверить · открывается ли чат по заказу услуги</span></li>
+      <li><b>Согласование в чате</b><p>Селлер пишет первым по шаблону и просит фото, размер и замер по груди. Возвращает эскиз и один из трёх ответов: беру / беру с оговоркой / не беру с причиной. Покупатель подтверждает, селлер фиксирует: «Макет согласован, версия от 15.09».</p><span class="dev none">без разработки · шаблоны сообщений для селлеров</span></li>
+      <li><b>Промокод и ссылка на футболку</b><p>Селлер закрывает заказ услуги, присылает промокод на 200 ₽ и прямую ссылку на карточку футболки с нужным размером.</p><span class="dev check">проверить · механика промокода от селлера и чья это комиссия</span></li>
+      <li><b>Заказ футболки</b><p>Покупатель возвращается в карточку, кладёт в корзину нужный размер, применяет промокод и платит 1290 ₽ вместо 1490 ₽. Он уже видел эскиз — это обычная покупка без неизвестности.</p><span class="dev none">без разработки</span></li>
+      <li><b>Производство и выдача</b><p>Селлер печатает по согласованному макету, отгружает по DBS, покупатель забирает в пункте выдачи. Возврат — только по чек-листу «брак / не брак».</p><span class="dev none">без разработки</span></li>
+    </ol>
+  </div>
+
+  <div class="cjm">
+    <div class="cjm-head">
+      <p class="eyebrow">CJM · вариант A</p>
+      <h3 style="margin-top:6px">Где покупатель уходит и что мы с этим делаем</h3>
+    </div>
+    <div class="curve">
+      <svg viewBox="0 0 800 74" preserveAspectRatio="none" aria-label="Эмоциональная кривая пути: рост интереса, провал на оплате услуги, подъём после эскиза">
+        <line x1="0" y1="37" x2="800" y2="37" stroke="currentColor" stroke-opacity=".14"></line>
+        <polyline points="20,30 130,22 240,52 350,44 460,14 570,18 680,20 780,10" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></polyline>
+        <circle cx="240" cy="52" r="4.5" fill="var(--bad)"></circle>
+        <circle cx="460" cy="14" r="4.5" fill="var(--ok)"></circle>
+        <text x="240" y="70" font-size="10" fill="var(--bad)" text-anchor="middle" font-family="IBM Plex Mono, monospace">платит за макет</text>
+        <text x="460" y="10" font-size="10" fill="var(--ok)" text-anchor="middle" font-family="IBM Plex Mono, monospace">увидел эскиз</text>
+      </svg>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Шаг</th><th>Что делает</th><th>Что думает</th><th>Риск отвала</th><th>Что делаем</th></tr></thead>
+        <tbody>
+          <tr><td>01 Лендинг</td><td>Читает баннер, листает подборку</td><td class="q">«О, тут можно со своим фото»</td><td><span class="risk r-lo">низкий</span></td><td>Баннер объясняет сервис за одну строку. Примеры реальных работ, а не рендеры</td></tr>
+          <tr><td>02 Карточка</td><td>Читает инфографику и описание</td><td class="q">«Почему сразу нельзя заказать?»</td><td><span class="risk r-md">средний</span></td><td>Инфографика первым фото — её видно и тем, кто пришёл из поиска</td></tr>
+          <tr><td>03 Услуга</td><td>Открывает вторую карточку</td><td class="q">«Это что, платно?»</td><td><span class="risk r-hi">высокий</span></td><td>Крупно: «вернём промокодом». Цена не выше 200 ₽</td></tr>
+          <tr><td>04 Оплата 200 ₽</td><td>Платит за согласование</td><td class="q">«Надеюсь, не зря»</td><td><span class="risk r-hi">высокий</span></td><td>Обещанный срок ответа на экране заказа, понятный следующий шаг</td></tr>
+          <tr><td>05 Чат открыт</td><td>Пишет продавцу, шлёт фото</td><td class="q">«Ответят вообще?»</td><td><span class="risk r-md">средний</span></td><td>Селлер пишет первым по шаблону. Порог ответа 24 ч</td></tr>
+          <tr><td>06 Эскиз</td><td>Смотрит макет, уточняет размер</td><td class="q">«Вот теперь понятно, что я получу»</td><td><span class="risk r-lo">низкий</span></td><td>Рекомендация размера по замеру — снимает главный повод для спора</td></tr>
+          <tr><td>07 Промокод</td><td>Получает код и ссылку</td><td class="q">«Ладно, значит правда бесплатно»</td><td><span class="risk r-md">средний</span></td><td>Ссылка сразу на нужный размер</td></tr>
+          <tr><td>08 Заказ</td><td>Оплачивает футболку</td><td class="q">«Я это уже видел, беру»</td><td><span class="risk r-lo">низкий</span></td><td>Макет и дата — в карточке заказа</td></tr>
+          <tr><td>09 Выдача</td><td>Забирает в ПВЗ</td><td class="q">«Совпало с эскизом?»</td><td><span class="risk r-md">средний</span></td><td>Чек-лист «брак / не брак» заранее, спор решает согласованный макет</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ================= B ================= -->
+<section class="panel" id="p-b" role="tabpanel" hidden>
+  <div class="intro">
+    <div>
+      <h2>Вариант B. Согласование через форму на лендинге</h2>
+      <p style="margin-top:10px">Кнопка на лендинге ведёт на форму. Заявка попадает селлеру, ответ с эскизом приходит покупателю, и он оформляет обычный заказ на футболку по ссылке из ответа. DBS-чат открывается уже по заказу футболки и работает как канал производственных уточнений.</p>
+    </div>
+    <div class="note"><b>Чем платим за простоту.</b> Фото покупателей и переписка живут вне контура площадки — их надо где-то хранить и согласовать это с юристами и ИБ. И покупатель уходит со страницы ждать ответ: часть не вернётся.</div>
+  </div>
+
+  <div class="rail">
+    <div class="step">
+      <div class="step-head"><span class="step-n">01</span><span class="step-t">Лендинг проекта</span></div>
+      <p class="step-sub">Здесь же лежит кнопка на форму — это точка входа в согласование.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Промо-страница · Печать на футболках</div>
+        <div class="scr">
+          <div class="img" style="height:96px;flex-direction:column;gap:5px;color:var(--ink-2)">
+            <div style="font-family:Unbounded,sans-serif;font-weight:600;font-size:13px;color:var(--ink)">Ваше фото на футболке</div>
+            <div style="font-size:10px">Пришлём макет до заказа — бесплатно</div>
+            <div style="font-size:9px;font-family:'IBM Plex Mono',monospace;letter-spacing:.08em">БАННЕР ПРОЕКТА</div>
+          </div>
+          <div class="btn pink">Собрать свой дизайн</div>
+          <div class="lbl">Или выберите готовый товар</div>
+          <div class="grid2">
+            <div class="card-mini"><div class="img">фото работы</div><div class="m">Оверсайз, белая<br><b>1490 ₽</b></div></div>
+            <div class="card-mini"><div class="img">фото работы</div><div class="m">Оверсайз, чёрная<br><b>1490 ₽</b></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="step key">
+      <div class="step-head"><span class="step-n">02</span><span class="step-t">Форма заявки</span></div>
+      <p class="step-sub">Отдельная страница лендинга. Разрешение файла проверяется при загрузке.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Форма · страница лендинга</div>
+        <div class="scr">
+          <div class="ttl">Расскажите, что напечатать</div>
+          <div class="drop">Перетащите фото<br>или выберите из галереи</div>
+          <div class="alert">Файл 900×900 — маловато. Пришлите оригинал из галереи, не пересланный в мессенджере.</div>
+          <div class="field filled">Надпись: БОСС</div>
+          <div class="row"><div class="field filled">Размер: M</div><div class="field filled">Грудь: 52 см</div></div>
+          <div class="field">Почта или телефон для ответа</div>
+          <div class="btn pink">Отправить селлеру</div>
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-head"><span class="step-n">03</span><span class="step-t">Заявка у селлера</span></div>
+      <p class="step-sub">Падает ему на почту или в таблицу. Площадка тут не посредник.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Почта селлера · PRINT.LAB</div>
+        <div class="scr">
+          <div class="lbl">Новая заявка · 15.09, 11:20</div>
+          <div class="img" style="height:64px">фото от покупателя</div>
+          <div class="tbl-mini">
+            <div><span>Надпись</span><b>БОСС</b></div>
+            <div><span>Размер</span><b>M, грудь 52 см</b></div>
+            <div><span>Разрешение</span><b>2400×2400 — ок</b></div>
+            <div><span>Ответить до</span><b>16.09, 11:20</b></div>
+          </div>
+          <div class="row"><div class="btn ghost">Не берусь</div><div class="btn">Ответить эскизом</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-head"><span class="step-n">04</span><span class="step-t">Ответ с эскизом</span></div>
+      <p class="step-sub">Приходит покупателю на почту — вместе со ссылкой на карточку.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Почта покупателя</div>
+        <div class="scr">
+          <div class="lbl">от PRINT.LAB · сегодня</div>
+          <div class="ttl">Ваш макет готов</div>
+          <div class="img" style="height:76px">эскиз на футболке</div>
+          <div class="txt">По замеру 52 см рекомендуем размер L — крой оверсайз. Изготовление 3–5 дней.</div>
+          <div class="alert">Возврат из-за размера будет невозможен — вещь печатается под вас.</div>
+          <div class="btn pink">Открыть карточку и заказать</div>
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-head"><span class="step-n">05</span><span class="step-t">Карточка футболки</span></div>
+      <p class="step-sub">Ничего не меняется: обычная карточка с обычной кнопкой «В корзину».</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Карточка товара</div>
+        <div class="scr">
+          <div class="img" style="height:78px">фото футболки · примеры работ</div>
+          <div class="ttl">Футболка оверсайз с вашим принтом</div>
+          <div class="price">1490 ₽</div>
+          <div class="lbl">Размер</div>
+          <div class="chips"><span class="chip">S</span><span class="chip">M</span><span class="chip on">L</span><span class="chip">XL</span></div>
+          <div class="alert info">Макет уже согласован 15.09 — укажите номер заявки в комментарии к заказу.</div>
+          <div class="btn pink">В корзину</div>
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-head"><span class="step-n">06</span><span class="step-t">Корзина и оплата</span></div>
+      <p class="step-sub">Один заказ вместо двух — главный плюс варианта.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Корзина</div>
+        <div class="scr">
+          <div class="row" style="gap:8px;align-items:center">
+            <div class="img" style="height:50px;flex:0 0 50px">фото</div>
+            <div style="flex:1"><div class="ttl">Футболка оверсайз, L</div><div class="txt">Заявка № 318 · макет от 15.09</div></div>
+          </div>
+          <div class="tbl-mini">
+            <div><span>Футболка</span><b>1490 ₽</b></div>
+            <div><span>Изготовление</span><b>3–5 дней</b></div>
+          </div>
+          <div class="price">1490 ₽</div>
+          <div class="alert">Возврат только при браке или несовпадении с макетом.</div>
+          <div class="btn pink">Оплатить</div>
+        </div>
+      </div>
+    </div>
+    <div class="step key">
+      <div class="step-head"><span class="step-n">07</span><span class="step-t">Заказ оплачен → чат открыт</span></div>
+      <p class="step-sub">Чат подключается только теперь и работает как производственный канал.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Заказ № 4471-2318</div>
+        <div class="scr">
+          <div class="alert good">Оплачено 1490 ₽</div>
+          <div class="steps4">
+            <div class="s4"><i>✓</i>Оплачен</div>
+            <div class="s4"><i>●</i>Печатается по макету от 15.09</div>
+            <div class="s4"><i>○</i>Передан в доставку</div>
+            <div class="s4"><i>○</i>Готов к выдаче</div>
+          </div>
+          <div class="img" style="height:56px">согласованный макет</div>
+          <div class="btn ghost">Открыть чат по заказу</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="walk">
+    <div class="walk-h">
+      <p class="eyebrow">Шаги подробно · вариант B</p>
+      <h3 style="margin-top:6px">Где лежит форма, как заявка доходит до селлера и когда появляется оплата</h3>
+    </div>
+    <ol>
+      <li><b>Лендинг проекта</b><p>Та же промо-страница с баннером, но на ней есть главная кнопка — «Собрать свой дизайн». Она ведёт на форму. Это отличие от варианта A: там точкой входа была карточка услуги, здесь — кнопка на лендинге.</p><span class="dev none">без разработки · промо-страница</span></li>
+      <li><b>Форма — отдельная страница лендинга</b><p>Технически это самая обычная веб-форма: загрузка фото, надпись, размер и замер по груди, контакт для ответа. Живёт на том же промо-домене, что и лендинг. Прямо при загрузке проверяет разрешение файла и сразу говорит, если оно низкое — так отсекается половина непечатаемых заявок ещё до селлера.</p><span class="dev check">нужно · сделать и разместить форму, решить где хранятся фото</span></li>
+      <li><b>Заявка уходит селлеру</b><p>Напрямую: на почту селлера или в таблицу, к которой у него есть доступ. Оператора-посредника в схеме нет. Селлер видит фото, параметры, результат проверки разрешения и срок, до которого нужно ответить.</p><span class="dev check">нужно · договорённость с селлерами и порог ответа 24 ч</span></li>
+      <li><b>Селлер отвечает эскизом</b><p>Письмо покупателю: эскиз на футболке, рекомендация по размеру, срок изготовления, предупреждение о невозвратности и прямая ссылка на карточку с нужным размером. Либо отказ с причиной — тоже письмом.</p><span class="dev none">без разработки · шаблон письма</span></li>
+      <li><b>Карточка футболки — без изменений</b><p>Это ответ на вопрос «где корзина»: карточка остаётся полностью обычной, кнопка «В корзину» на месте, положить товар можно в любой момент. Форма ничего не блокирует — она просто идёт до покупки, чтобы человек увидел эскиз раньше, чем заплатит.</p><span class="dev none">без разработки</span></li>
+      <li><b>Корзина и оплата 1490 ₽</b><p>Стандартная корзина. Кнопка «Оплатить» появляется ровно там же, где и у любого другого товара площадки. Номер заявки покупатель указывает в комментарии к заказу — так селлер связывает заказ с согласованным макетом.</p><span class="dev none">без разработки</span></li>
+      <li><b>Заказ оплачен — открывается DBS-чат</b><p>Здесь чат появляется впервые, и согласовывать в нём уже нечего: он нужен для производственных уточнений и трек-номера. Дальше печать, отгрузка по DBS, выдача в пункте.</p><span class="dev none">без разработки</span></li>
+    </ol>
+  </div>
+
+  <div class="cjm">
+    <div class="cjm-head">
+      <p class="eyebrow">CJM · вариант B</p>
+      <h3 style="margin-top:6px">Меньше шагов, но путь выходит за пределы площадки</h3>
+    </div>
+    <div class="curve">
+      <svg viewBox="0 0 800 74" preserveAspectRatio="none" aria-label="Эмоциональная кривая: ровный подъём с провалом на ожидании ответа">
+        <line x1="0" y1="37" x2="800" y2="37" stroke="currentColor" stroke-opacity=".14"></line>
+        <polyline points="20,28 180,20 340,48 500,16 660,18 780,10" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></polyline>
+        <circle cx="340" cy="48" r="4.5" fill="var(--bad)"></circle>
+        <text x="340" y="66" font-size="10" fill="var(--bad)" text-anchor="middle" font-family="IBM Plex Mono, monospace">ушёл ждать ответ</text>
+      </svg>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Шаг</th><th>Что делает</th><th>Что думает</th><th>Риск отвала</th><th>Что делаем</th></tr></thead>
+        <tbody>
+          <tr><td>01 Лендинг</td><td>Жмёт «Собрать свой дизайн»</td><td class="q">«Хотя бы бесплатно»</td><td><span class="risk r-lo">низкий</span></td><td>Кнопка сразу под баннером, до подборки товаров</td></tr>
+          <tr><td>02 Форма</td><td>Грузит фото, вводит замер</td><td class="q">«Зачем им мой телефон?»</td><td><span class="risk r-md">средний</span></td><td>Минимум полей. Проверка файла на месте, а не письмом через день</td></tr>
+          <tr><td>03 Ожидание</td><td>Закрывает страницу</td><td class="q">«Наверное, забудут»</td><td><span class="risk r-hi">высокий</span></td><td>Обещанный срок на экране + напоминание селлеру через 24 ч</td></tr>
+          <tr><td>04 Эскиз</td><td>Открывает письмо</td><td class="q">«Вот это уже похоже»</td><td><span class="risk r-md">средний</span></td><td>Ссылка ведёт сразу на карточку с нужным размером</td></tr>
+          <tr><td>05 Карточка</td><td>Кладёт в корзину</td><td class="q">«Всё как обычно»</td><td><span class="risk r-lo">низкий</span></td><td>Карточка не меняется — привычный сценарий покупки</td></tr>
+          <tr><td>06 Оплата</td><td>Платит 1490 ₽</td><td class="q">«Я уже видел, что получу»</td><td><span class="risk r-lo">низкий</span></td><td>Номер заявки в комментарии связывает заказ с макетом</td></tr>
+          <tr><td>07 Выдача</td><td>Забирает в ПВЗ</td><td class="q">«Совпало?»</td><td><span class="risk r-md">средний</span></td><td>Тот же чек-лист «брак / не брак»</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ================= C ================= -->
+<section class="panel" id="p-c" role="tabpanel" hidden>
+  <div class="intro">
+    <div>
+      <h2>Вариант C. Обычный заказ и нейтральная отмена</h2>
+      <p style="margin-top:10px">Ничего не изобретаем: покупатель заказывает футболку, чат открывается по заказу, макет согласуют после оплаты. Если не договорились — заказ отменяется, деньги возвращаются полностью, и отмена <b>не считается виной селлера</b>.</p>
+    </div>
+    <div class="note"><b>Запускать только с нейтральным кодом отмены.</b> Без него добросовестный селлер получает штраф за отказ печатать непечатаемое — и селлеры уйдут из POD быстрее, чем мы измерим спрос.</div>
+  </div>
+
+  <div class="rail">
+    <div class="step">
+      <div class="step-head"><span class="step-n">01</span><span class="step-t">Карточка футболки</span></div>
+      <p class="step-sub">Порядок объясняется до оплаты, иначе он читается как обман.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Карточка товара</div>
+        <div class="scr">
+          <div class="img" style="height:92px">фото футболки · примеры работ</div>
+          <div class="ttl">Футболка оверсайз с вашим принтом</div>
+          <div class="price">1490 ₽</div>
+          <div class="alert info">Сначала оформляете заказ — потом согласовываете макет в чате. Не договорились? Отменим и вернём деньги полностью.</div>
+          <div class="btn pink">Заказать и согласовать макет</div>
+        </div>
+      </div>
+    </div>
+    <div class="step key">
+      <div class="step-head"><span class="step-n">02</span><span class="step-t">Оплата → чат открыт</span></div>
+      <p class="step-sub">Деньги уже списаны — здесь живёт весь риск варианта.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Заказ № 4471-2290</div>
+        <div class="scr">
+          <div class="alert good">Оплачено 1490 ₽</div>
+          <div class="tbl-mini">
+            <div><span>Статус</span><b>Согласование макета</b></div>
+            <div><span>Ответ продавца</span><b>до 24 часов</b></div>
+          </div>
+          <div class="alert">Печать начнётся только после того, как вы подтвердите эскиз.</div>
+          <div class="btn pink">Открыть чат с продавцом</div>
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-head"><span class="step-n">03</span><span class="step-t">Согласовали</span></div>
+      <p class="step-sub">Дальше путь совпадает с вариантом A.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Чат · PRINT.LAB</div>
+        <div class="scr">
+          <div class="chatflow">
+            <div class="msg them"><span class="who">Продавец</span>Вот эскиз, по замеру советую L.<div class="img" style="height:52px;margin-top:5px">эскиз на футболке</div></div>
+            <div class="msg me"><span class="who">Вы</span>Согласовано</div>
+            <div class="msg fix">Макет согласован, версия от 15.09</div>
+          </div>
+          <div class="alert good">Заказ передан в работу</div>
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-head"><span class="step-n">04</span><span class="step-t">Не договорились</span></div>
+      <p class="step-sub">Развилка, которой нет в A и B: сделка уже оплачена.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Заказ № 4471-2290</div>
+        <div class="scr">
+          <div class="chatflow">
+            <div class="msg them"><span class="who">Продавец</span>К сожалению, разрешение фото не позволяет напечатать без потери качества. Пришлёте оригинал?</div>
+            <div class="msg me"><span class="who">Вы</span>Другого нет</div>
+          </div>
+          <div class="alert">Заказ отменён по согласованию сторон. 1490 ₽ вернутся на карту за 1–3 дня.</div>
+          <div class="alert info">Отмена не влияет на рейтинг продавца — нейтральный код отмены.</div>
+          <div class="btn ghost">Выбрать шаблон вместо фото</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cjm">
+    <div class="cjm-head">
+      <p class="eyebrow">CJM · вариант C</p>
+      <h3 style="margin-top:6px">Один заказ, но каждый сбой стоит денег</h3>
+    </div>
+    <div class="curve">
+      <svg viewBox="0 0 800 74" preserveAspectRatio="none" aria-label="Эмоциональная кривая: резкий провал в момент оплаты вслепую">
+        <line x1="0" y1="37" x2="800" y2="37" stroke="currentColor" stroke-opacity=".14"></line>
+        <polyline points="20,26 200,58 400,20 600,16 780,12" fill="none" stroke="var(--warn)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></polyline>
+        <circle cx="200" cy="58" r="4.5" fill="var(--bad)"></circle>
+        <text x="200" y="72" font-size="10" fill="var(--bad)" text-anchor="middle" font-family="IBM Plex Mono, monospace">платит вслепую</text>
+      </svg>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Шаг</th><th>Что делает</th><th>Что думает</th><th>Риск отвала</th><th>Что делаем</th></tr></thead>
+        <tbody>
+          <tr><td>01 Карточка</td><td>Читает порядок</td><td class="q">«Сначала заплатить? А если не выйдет?»</td><td><span class="risk r-hi">высокий</span></td><td>Обещание полного возврата — крупно, до кнопки</td></tr>
+          <tr><td>02 Оплата</td><td>Платит 1490 ₽ вслепую</td><td class="q">«Рискую»</td><td><span class="risk r-hi">высокий</span></td><td>Срок ответа продавца на экране заказа</td></tr>
+          <tr><td>03 Чат</td><td>Согласовывает макет</td><td class="q">«Ну наконец видно»</td><td><span class="risk r-md">средний</span></td><td>Шаблон первого сообщения, порог 24 ч</td></tr>
+          <tr><td>04 Отмена</td><td>Не договорились, ждёт возврат</td><td class="q">«Зря потратил вечер»</td><td>—</td><td>Нейтральный код отмены + предложение шаблона взамен</td></tr>
+          <tr><td>05 Выдача</td><td>Забирает в ПВЗ</td><td class="q">«Совпало?»</td><td><span class="risk r-md">средний</span></td><td>Чек-лист «брак / не брак»</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<div class="cmp">
+  <p class="eyebrow">Сравнение</p>
+  <h2 style="margin:8px 0 16px">Что выбираем и что это стоит</h2>
+  <div class="tbl-wrap" style="border:1px solid var(--line);border-radius:12px;background:var(--surface)">
+    <table>
+      <thead><tr><th></th><th>A · карточка-услуга</th><th>B · форма</th><th>C · заказ + отмена</th></tr></thead>
+      <tbody>
+        <tr><td>Заказов в пути</td><td>2</td><td>1</td><td>1</td></tr>
+        <tr><td>Точка входа в согласование</td><td>карточка услуги</td><td>кнопка на лендинге</td><td>карточка футболки</td></tr>
+        <tr><td>Согласование до оплаты футболки</td><td class="yes">да</td><td class="yes">да</td><td class="no">нет</td></tr>
+        <tr><td>Фото внутри контура площадки</td><td class="yes">да</td><td class="no">нет</td><td class="yes">да</td></tr>
+        <tr><td>Платный фильтр несерьёзных заявок</td><td class="yes">200 ₽</td><td class="no">нет</td><td class="no">нет</td></tr>
+        <tr><td>Стоимость сбоя при несогласии</td><td>200 ₽ и промокод</td><td>ноль</td><td>возврат 1490 ₽ + поддержка</td></tr>
+        <tr><td>Что блокирует запуск</td><td>карточка-услуга без отгрузки</td><td>форма и хранение фото вне площадки</td><td>нейтральный код отмены</td></tr>
+        <tr><td>Срок до запуска</td><td>2–3 недели</td><td>2 недели</td><td>1–2 недели</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="blockers">
+  <div class="blk">
+    <p class="eyebrow">Вопрос 1 · решает всё</p>
+    <h3>Можно ли завести карточку-услугу без физической отгрузки?</h3>
+    <p>Если DBS требует передачи товара в логистику, вариант A ломается целиком. Ответ получается за один разговор с владельцами процесса — и определяет конструкцию MVP.</p>
+  </div>
+  <div class="blk">
+    <p class="eyebrow">Вопрос 2</p>
+    <h3>Открывается ли DBS-чат по заказу услуги так же, как по товару?</h3>
+    <p>Вся конструкция A держится на этом. Если чат привязан только к физическому товару — идём в B.</p>
+  </div>
+  <div class="blk">
+    <p class="eyebrow">Вопрос 3</p>
+    <h3>Может ли селлер выдать промокод на 200 ₽ и кто несёт их в комиссии?</h3>
+    <p>Без возврата стоимости услуги обещание «вернём промокодом» рушится, а вместе с ним и конверсия на шаге 03.</p>
+  </div>
+  <div class="blk">
+    <p class="eyebrow">Общее для всех вариантов</p>
+    <h3>Чек-лист «брак / не брак» — до запуска, а не после первого спора</h3>
+    <p>Возврат по качеству нельзя отменить правилами. Значит границу надо провести заранее: дефект и несовпадение с макетом — возврат; размер, оттенок, передумал — нет.</p>
+  </div>
+</div>
+
+<footer>Макеты — схематичные, для согласования логики и текстов, не для передачи в вёрстку. Категория MVP — одежда, SKU — футболка оверсайз, печать в одну зону.</footer>
+</div>
+
+<script>
+(function(){
+  var tabs=[].slice.call(document.querySelectorAll('.tab'));
+  var panels={a:document.getElementById('p-a'),b:document.getElementById('p-b'),c:document.getElementById('p-c')};
+  tabs.forEach(function(t){
+    t.addEventListener('click',function(){
+      tabs.forEach(function(x){x.setAttribute('aria-selected', x===t?'true':'false');});
+      Object.keys(panels).forEach(function(k){panels[k].hidden = (k!==t.dataset.p);});
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
