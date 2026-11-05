@@ -1,0 +1,940 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Print on Demand: концепция</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Golos+Text:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --paper:#FAF8F7; --surface:#FFFFFF; --surface-2:#F2EEEF; --surface-3:#E7E1E4;
+  --ink:#16141A; --ink-2:#4A444E; --ink-3:#7C7480;
+  --line:#DED7DB; --line-2:#C6BCC2;
+  --accent:#B82A63; --accent-soft:#FBE8F0; --accent-line:#E9A7C3;
+  --cyan:#12667F; --cyan-soft:#E2F0F4;
+  --ok:#2C6E4C; --ok-soft:#E3F1E8;
+  --warn:#8F5C0E; --warn-soft:#FAF0DA;
+  --bad:#A32F26; --bad-soft:#FAE6E3;
+  --shadow:0 1px 2px rgba(22,20,26,.05), 0 10px 28px -16px rgba(22,20,26,.35);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#131116; --surface:#1B181F; --surface-2:#242029; --surface-3:#2E2934;
+    --ink:#F2EEF1; --ink-2:#BCB3BC; --ink-3:#8B8290;
+    --line:#332D38; --line-2:#473F4D;
+    --accent:#F2699C; --accent-soft:#3A1B2A; --accent-line:#7A3654;
+    --cyan:#67C3DC; --cyan-soft:#12303A;
+    --ok:#7FCFA3; --ok-soft:#16301F;
+    --warn:#E0AC5C; --warn-soft:#33260F;
+    --bad:#F0897E; --bad-soft:#361A16;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -16px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#131116; --surface:#1B181F; --surface-2:#242029; --surface-3:#2E2934;
+  --ink:#F2EEF1; --ink-2:#BCB3BC; --ink-3:#8B8290;
+  --line:#332D38; --line-2:#473F4D;
+  --accent:#F2699C; --accent-soft:#3A1B2A; --accent-line:#7A3654;
+  --cyan:#67C3DC; --cyan-soft:#12303A;
+  --ok:#7FCFA3; --ok-soft:#16301F;
+  --warn:#E0AC5C; --warn-soft:#33260F;
+  --bad:#F0897E; --bad-soft:#361A16;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -16px rgba(0,0,0,.8);
+}
+
+*{box-sizing:border-box}
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:"Golos Text","Helvetica Neue",Arial,sans-serif;
+  font-size:15px; line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px 96px}
+h1,h2,h3{font-family:Unbounded,"Golos Text",sans-serif;text-wrap:balance;margin:0}
+h1{font-weight:700;font-size:clamp(30px,4.4vw,46px);line-height:1.08;letter-spacing:-.02em}
+h2{font-weight:600;font-size:clamp(21px,2.6vw,27px);line-height:1.18;letter-spacing:-.01em}
+h3{font-weight:500;font-size:17px;line-height:1.3}
+p{margin:0}
+.eyebrow{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);
+}
+
+/* header */
+header{padding:56px 0 34px;border-bottom:1px solid var(--line)}
+.head-grid{display:grid;gap:26px;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);align-items:end}
+@media(max-width:820px){.head-grid{grid-template-columns:1fr}}
+.lede{color:var(--ink-2);font-size:16.5px;max-width:62ch;margin-top:14px}
+.facts{display:flex;flex-wrap:wrap;gap:8px}
+.fact{
+  background:var(--surface);border:1px solid var(--line);border-radius:8px;
+  padding:9px 12px;font-size:12.5px;color:var(--ink-2);
+}
+.fact b{color:var(--ink);font-weight:600}
+
+/* tabs */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:34px 0 0;position:sticky;top:env(safe-area-inset-top,0px);z-index:20;
+  background:var(--paper);padding:12px 0;border-bottom:1px solid var(--line)}
+.tab{
+  font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.06em;
+  background:var(--surface);color:var(--ink-2);border:1px solid var(--line);
+  padding:9px 14px;border-radius:7px;cursor:pointer;transition:.15s;
+}
+.tab:hover{border-color:var(--line-2);color:var(--ink)}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.tab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+section.panel{padding-top:38px}
+.intro{display:grid;gap:22px;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);align-items:start;margin-bottom:34px}
+@media(max-width:820px){.intro{grid-template-columns:1fr}}
+.intro p{color:var(--ink-2);max-width:66ch}
+.note{
+  background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--accent);
+  border-radius:0 8px 8px 0;padding:14px 16px;font-size:13.5px;color:var(--ink-2);
+}
+.note b{color:var(--ink)}
+
+/* screens rail */
+.rail{
+  display:flex;gap:18px;overflow-x:auto;padding:6px 4px 22px;
+  scroll-snap-type:x proximity;
+}
+.rail::-webkit-scrollbar{height:9px}
+.rail::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:9px}
+.step{flex:0 0 264px;scroll-snap-align:start;display:flex;flex-direction:column;gap:10px}
+.step-head{display:flex;align-items:baseline;gap:8px}
+.step-n{
+  font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:500;
+  color:var(--paper);background:var(--ink);border-radius:5px;padding:2px 6px;
+}
+.step.key .step-n{background:var(--accent);color:#fff}
+:root[data-theme="dark"] .step.key .step-n,
+.step.key .step-n{color:var(--surface)}
+.step-t{font-size:13.5px;font-weight:600;line-height:1.25}
+.step-sub{font-size:12px;color:var(--ink-3);line-height:1.4;min-height:2.8em}
+
+.phone{
+  background:var(--surface);border:1px solid var(--line-2);border-radius:14px;
+  box-shadow:var(--shadow);overflow:hidden;height:452px;display:flex;flex-direction:column;
+}
+.step.key .phone{border-color:var(--accent-line);box-shadow:0 0 0 3px var(--accent-soft),var(--shadow)}
+.chrome{
+  background:var(--surface-2);border-bottom:1px solid var(--line);
+  padding:7px 10px;display:flex;align-items:center;gap:7px;
+  font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--ink-3);
+}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--line-2);flex:none}
+.scr{padding:12px;display:flex;flex-direction:column;gap:9px;overflow:hidden;flex:1}
+.img{background:var(--surface-3);border-radius:6px;display:flex;align-items:center;justify-content:center;
+  color:var(--ink-3);font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.04em}
+.lbl{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.ttl{font-size:12.5px;font-weight:600;line-height:1.3}
+.txt{font-size:11px;color:var(--ink-2);line-height:1.45}
+.price{font-family:Unbounded,sans-serif;font-weight:600;font-size:16px}
+.old{color:var(--ink-3);text-decoration:line-through;font-size:11.5px;font-family:"Golos Text",sans-serif;font-weight:400;margin-left:6px}
+.btn{
+  background:var(--ink);color:var(--paper);border-radius:7px;padding:9px;text-align:center;
+  font-size:11.5px;font-weight:600;
+}
+.btn.pink{background:var(--accent);color:#fff}
+:root[data-theme="dark"] .btn.pink{color:#22101A}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line-2);font-weight:500}
+.row{display:flex;gap:6px}
+.row>*{flex:1}
+.chip{
+  font-size:10px;padding:3px 7px;border-radius:20px;background:var(--surface-2);
+  color:var(--ink-2);border:1px solid var(--line);white-space:nowrap;
+}
+.chip.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.chip.warn{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+.chip.ok{background:var(--ok-soft);color:var(--ok);border-color:transparent}
+.chips{display:flex;gap:5px;flex-wrap:wrap}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.card-mini{border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.card-mini .img{border-radius:0;height:52px}
+.card-mini .m{padding:5px 6px;font-size:9.5px;color:var(--ink-2);line-height:1.3}
+.steps4{display:flex;flex-direction:column;gap:5px}
+.s4{display:flex;gap:6px;align-items:flex-start;font-size:10.5px;color:var(--ink-2);line-height:1.35}
+.s4 i{font-family:"IBM Plex Mono",monospace;font-style:normal;color:var(--accent);font-size:9.5px;padding-top:1px}
+.alert{background:var(--warn-soft);color:var(--warn);border-radius:6px;padding:7px 8px;font-size:10px;line-height:1.4}
+.alert.info{background:var(--cyan-soft);color:var(--cyan)}
+.alert.good{background:var(--ok-soft);color:var(--ok)}
+.tbl-mini{font-size:10px;color:var(--ink-2);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.tbl-mini div{display:flex;justify-content:space-between;padding:4px 7px;border-bottom:1px solid var(--line)}
+.tbl-mini div:last-child{border-bottom:0}
+.msg{max-width:86%;padding:7px 9px;border-radius:9px;font-size:10.5px;line-height:1.4}
+.msg.them{background:var(--surface-2);border:1px solid var(--line);align-self:flex-start;border-bottom-left-radius:3px}
+.msg.me{background:var(--ink);color:var(--paper);align-self:flex-end;border-bottom-right-radius:3px}
+.msg .who{display:block;font-family:"IBM Plex Mono",monospace;font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;opacity:.6;margin-bottom:3px}
+.msg.fix{background:var(--ok-soft);color:var(--ok);border:1px dashed var(--ok);align-self:center;max-width:100%;text-align:center;font-weight:600}
+.chatflow{display:flex;flex-direction:column;gap:6px;flex:1;overflow:hidden}
+.field{border:1px solid var(--line-2);border-radius:6px;padding:7px 8px;font-size:10.5px;color:var(--ink-3);background:var(--surface)}
+.field.filled{color:var(--ink)}
+.drop{border:1px dashed var(--line-2);border-radius:6px;padding:14px 8px;text-align:center;font-size:10.5px;color:var(--ink-3)}
+
+/* CJM */
+.cjm{margin-top:14px;border:1px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden}
+.cjm-head{padding:16px 18px 4px}
+.curve{padding:6px 18px 14px}
+.curve svg{width:100%;height:74px;display:block;overflow:visible}
+.tbl-wrap{overflow-x:auto;border-top:1px solid var(--line)}
+table{border-collapse:collapse;width:100%;min-width:820px;font-size:13px}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{
+  font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-3);font-weight:500;background:var(--surface-2);position:sticky;top:env(safe-area-inset-top,0px);
+}
+td:first-child{white-space:nowrap;font-weight:600;font-size:12.5px}
+tbody tr:last-child td{border-bottom:0}
+td .q{color:var(--ink-2);font-style:italic}
+.risk{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.06em;padding:2px 7px;border-radius:5px;white-space:nowrap}
+.r-hi{background:var(--bad-soft);color:var(--bad)}
+.r-md{background:var(--warn-soft);color:var(--warn)}
+.r-lo{background:var(--ok-soft);color:var(--ok)}
+
+.cmp{margin-top:56px}
+.cmp table{min-width:720px}
+.cmp td:first-child{font-weight:500;color:var(--ink-2);font-size:13px;white-space:normal}
+.yes{color:var(--ok);font-weight:600}
+.no{color:var(--bad);font-weight:600}
+
+.blockers{margin-top:52px;display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.blk{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px}
+.blk .eyebrow{color:var(--accent)}
+.blk h3{margin:8px 0 8px}
+.blk p{font-size:13.5px;color:var(--ink-2)}
+/* walkthrough */
+.walk{margin:26px 0 0;border:1px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden}
+.walk-h{padding:16px 18px 2px}
+.walk ol{list-style:none;counter-reset:w;margin:10px 0 0;padding:0 18px 18px}
+.walk li{counter-increment:w;position:relative;padding:12px 0 12px 44px;border-top:1px solid var(--line)}
+.walk li:first-child{border-top:0}
+.walk li::before{
+  content:counter(w,decimal-leading-zero);position:absolute;left:0;top:13px;
+  font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--accent);
+  border:1px solid var(--accent-line);border-radius:5px;padding:1px 5px;background:var(--accent-soft);
+}
+.walk li b{display:block;font-size:14px;margin-bottom:3px}
+.walk li p{font-size:13.5px;color:var(--ink-2);max-width:78ch}
+.walk li .dev{
+  display:inline-block;margin-top:6px;font-family:"IBM Plex Mono",monospace;font-size:10.5px;
+  letter-spacing:.06em;padding:2px 8px;border-radius:5px;background:var(--surface-2);color:var(--ink-3);
+  border:1px solid var(--line);
+}
+.walk li .dev.none{background:var(--ok-soft);color:var(--ok);border-color:transparent}
+.walk li .dev.check{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+.archive{
+  background:var(--surface-2);border:1px dashed var(--line-2);border-radius:10px;
+  padding:12px 16px;margin-bottom:26px;font-size:13.5px;color:var(--ink-2);
+}
+.archive b{color:var(--ink)}
+.update{
+  margin-top:18px;background:var(--accent-soft);border:1px solid var(--accent-line);border-radius:10px;
+  padding:12px 16px;font-size:14px;color:var(--ink);max-width:70ch;
+}
+.btn.native{outline:2px dashed var(--accent);outline-offset:2px}
+.tab .badge{font-size:9.5px;margin-left:6px;padding:1px 5px;border-radius:4px;background:var(--accent);color:#fff}
+.tab.old{opacity:.72}
+.cmp th.main,.cmp td.main{background:var(--accent-soft)}
+footer{margin-top:56px;padding-top:22px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-3)}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+.rt{display:flex;gap:4px;flex-wrap:wrap}
+.rt span{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.04em;padding:1px 6px;border-radius:4px;background:var(--bad-soft);color:var(--bad)}
+.check{display:flex;gap:7px;align-items:flex-start;font-size:10.5px;color:var(--ink);line-height:1.4}
+.check .box{flex:none;width:13px;height:13px;border:1.5px solid var(--accent);border-radius:3px;margin-top:1px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--accent)}
+.sec{margin-top:60px}
+.sec>h2{margin:8px 0 10px}
+.sec>.lead{color:var(--ink-2);max-width:72ch;margin-bottom:18px}
+.concl{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.concl .blk p{font-size:13.5px}
+.quote{font-style:italic;color:var(--ink-3);font-size:12.5px;margin-top:8px;border-left:2px solid var(--line-2);padding-left:9px}
+.rid{font-family:"IBM Plex Mono",monospace;font-weight:600;color:var(--bad)}
+.req{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.req li{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:13.5px;color:var(--ink-2);display:grid;grid-template-columns:44px 1fr;gap:10px}
+.req li b{color:var(--ink)}
+.req .n{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--accent);padding-top:2px}
+.meet{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.meet .blk ul{margin:6px 0 0;padding-left:18px;font-size:13px;color:var(--ink-2)}
+.meet .blk li{margin:3px 0}
+.meet .out{margin-top:10px;font-size:12.5px;background:var(--ok-soft);color:var(--ok);border-radius:6px;padding:7px 9px}
+.gate{margin:18px 0;background:var(--warn-soft);color:var(--warn);border-radius:10px;padding:14px 16px;font-size:14px}
+.gate b{color:inherit}
+</style>
+<style>body{background:var(--paper)}</style>
+</head>
+<body style="margin:0">
+<div class="wrap">
+<header>
+  <p class="eyebrow">Print on Demand · одежда · футболка</p>
+  <h1>MVP и целевое решение</h1>
+  <p class="lede">Два этапа одного продукта. MVP запускаем на одной футболке и 1–2 продавцах, чтобы проверить, что покупатели оформляют персонализированные заказы внутри площадки. Целевое решение масштабирует это в сервис: дизайн собирается в карточке, а цена зависит от выбранных опций.</p>
+</header>
+
+<div class="sec">
+  <p class="eyebrow">Сравнение</p>
+  <h2>Чем отличаются два решения</h2>
+  <div class="tbl-wrap" style="border:1px solid var(--line);border-radius:12px;background:var(--surface)">
+    <table>
+      <thead><tr><th></th><th>MVP</th><th>Целевое решение</th></tr></thead>
+      <tbody>
+        <tr><td>Задача</td><td>Проверить, что покупатели и продавцы доходят до заказа внутри площадки</td><td>Масштабировать персонализацию как сервис площадки</td></tr>
+        <tr><td>Где создаётся дизайн</td><td>Покупатель присылает фото в чат, продавец делает эскиз</td><td>В карточке: своё фото или AI по описанию, превью на товаре</td></tr>
+        <tr><td>Согласование</td><td>В чате до заказа</td><td>Макет уходит в ЛК продавца, продавец подтверждает производимость</td></tr>
+        <tr><td>Как макет связан с заказом</td><td>Макет закреплён в чате и подтверждён покупателем, сам прикрепляется к позиции в корзине</td><td>Заказ создаётся из подтверждённого макета, другого пути нет</td></tr>
+        <tr><td>Цена</td><td><b>Единая, 1490 ₽</b>, разложена на изделие, нанесение и макет. Зона, размер принта и форматы ограничены</td><td><b>По прайсу продавца</b>: база + опции + услуги. Итог виден до оплаты</td></tr>
+        <tr><td>На чём зарабатывает продавец</td><td>Маржа в единой цене</td><td>Маржа на изделии, платные опции печати, разработка макета, срочность</td></tr>
+        <tr><td>Чат</td><td>Основной канал согласования</td><td>Для уточнений, не для оформления</td></tr>
+        </tbody>
+    </table>
+  </div>
+  
+</div>
+
+<div class="sec">
+  <p class="eyebrow">Макеты</p>
+  <h2>Путь покупателя и путь продавца</h2>
+  <p class="lead">Экраны листаются вбок. Вкладки переключают решение и роль.</p>
+</div>
+<div class="tabs" role="tablist">
+  <button class="tab" role="tab" aria-selected="true" data-p="mb">MVP · ПОКУПАТЕЛЬ</button>
+  <button class="tab" role="tab" aria-selected="false" data-p="ms">MVP · ПРОДАВЕЦ</button>
+  <button class="tab" role="tab" aria-selected="false" data-p="tb">ЦЕЛЕВОЕ · ПОКУПАТЕЛЬ</button>
+  <button class="tab" role="tab" aria-selected="false" data-p="ts">ЦЕЛЕВОЕ · ПРОДАВЕЦ</button>
+</div>
+
+<section class="panel" id="p-mb" role="tabpanel">
+  <div class="intro">
+    <div>
+      <h2>MVP · путь покупателя</h2>
+      <p style="margin-top:10px">Согласование идёт в чате до заказа. Когда эскиз готов, продавец закрепляет его в чате как согласованный макет, и покупатель подтверждает его одной кнопкой. Покупатель кладёт в корзину обычную карточку, а закреплённый макет автоматически прикрепляется к позиции. В чекауте видны макет и разбивка цены. Без подтверждённого макета POD-позицию оформить нельзя. Новых карточек и модерации нет, цена единая: 1490 ₽.</p>
+    </div>
+  </div>
+
+  <div class="rail">
+    <div class="step">
+      <div class="step-head"><span class="step-n">01</span><span class="step-t">Витринная карточка</span></div>
+      <p class="step-sub">Единая цена и рамки персонализации. Основная кнопка ведёт в чат с продавцом.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Карточка товара · признак POD</div>
+        <div class="scr">
+          <div class="img" style="height:62px">примеры работ продавца</div>
+          <div class="ttl">Футболка оверсайз с вашим принтом</div>
+          <div class="price">1490 ₽</div>
+          <div class="tbl-mini">
+            <div><span>Зона печати</span><b>перёд</b></div>
+            <div><span>Размер принта</span><b>до А4</b></div>
+            <div><span>Что можно</span><b>фото или надпись</b></div>
+          </div>
+          <div class="alert">Изготавливается по вашему макету. Оформить заказ можно после того, как вы согласуете дизайн с продавцом.</div>
+          <div class="btn pink">Согласовать дизайн в чате</div>
+          <div class="btn ghost">В корзину</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="step-n">02</span><span class="step-t">Согласование в чате</span></div>
+      <p class="step-sub">Чат до заказа. Здесь обсуждают дизайн и правки.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Чат · PRINT.LAB · по товару</div>
+        <div class="scr">
+          <div class="chatflow">
+            <div class="msg me"><span class="who">Вы</span>Фото кота, надпись «БОСС». M, по груди 52 см<div class="img" style="height:34px;margin-top:5px">фото.jpg</div></div>
+            <div class="msg them"><span class="who">Продавец</span>Вот эскиз. По замеру советую L.<div class="img" style="height:44px;margin-top:5px">эскиз на футболке</div></div>
+            <div class="msg me"><span class="who">Вы</span>Отлично, беру L</div>
+          </div>
+          <div class="field">Сообщение…</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step key">
+      <div class="step-head"><span class="step-n">03</span><span class="step-t">Продавец закрепил макет</span></div>
+      <p class="step-sub">Системное сообщение: эскиз, параметры и цена. Покупатель подтверждает кнопкой, а не словами.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Чат · PRINT.LAB · по товару</div>
+        <div class="scr">
+          <div class="chatflow">
+            <div class="msg them" style="padding:0;overflow:hidden;max-width:100%;width:100%">
+              <div style="padding:7px 9px 0"><span class="who">Согласованный макет · закреплён продавцом</span></div>
+              <div class="img" style="height:80px;border-radius:0;margin-top:4px">эскиз М-318 на футболке</div>
+              <div style="padding:7px 9px;font-size:10.5px;line-height:1.45"><b>М-318 · L · перёд, до А4</b><br>Футболка оверсайз · <b>1490 ₽</b><br>Действует 7 дней</div>
+              <div class="row" style="gap:0"><div class="btn ghost" style="border-radius:0;border-width:1px 0 0">Нужны правки</div><div class="btn pink" style="border-radius:0">Подтвердить макет</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step key">
+      <div class="step-head"><span class="step-n">04</span><span class="step-t">Корзина: макет прикрепился сам</span></div>
+      <p class="step-sub">Покупатель кладёт в корзину обычную карточку, и подтверждённый макет подтягивается к позиции.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Корзина</div>
+        <div class="scr">
+          <div class="alert good">Вы подтвердили макет М-318 · 15.09, 14:10</div>
+          <div class="row" style="gap:8px;align-items:center">
+            <div class="img" style="height:50px;flex:0 0 50px">М-318</div>
+            <div style="flex:1"><div class="ttl">Футболка оверсайз, L</div><div class="txt">Макет М-318 прикреплён · PRINT.LAB</div></div>
+          </div>
+          <div class="field filled">Макет: М-318 от 15.09 ▾</div>
+          <div class="txt">Если подтверждённых макетов несколько, выберите нужный. На одну позицию один макет.</div>
+          <div class="alert">Без подтверждённого макета эту футболку оформить нельзя.</div>
+          <div class="btn pink">К оформлению</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step key">
+      <div class="step-head"><span class="step-n">05</span><span class="step-t">Чекаут: макет, разбивка и условия</span></div>
+      <p class="step-sub">Цена единая, но разложена на части. От разбивки зависит сумма при отказе.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Оформление заказа</div>
+        <div class="scr">
+          <div class="row" style="gap:8px;align-items:center">
+            <div class="img" style="height:40px;flex:0 0 40px">М-318</div>
+            <div style="flex:1"><div class="ttl">Футболка по макету М-318</div><div class="txt">L · перёд</div></div>
+          </div>
+          <div class="tbl-mini">
+            <div><span>Изделие</span><b>690 ₽</b></div>
+            <div><span>Нанесение</span><b>600 ₽</b></div>
+            <div><span>Работа над макетом</span><b>200 ₽</b></div>
+            <div><span>Итого · предоплата</span><b>1490 ₽</b></div>
+          </div>
+          <div class="check"><span class="box">✓</span><span>Подтверждаю макет М-318. Изготовление на заказ: возврат при браке или несоответствии макету. При отказе удерживаются выполненные работы. <u>Оферта</u></span></div>
+          <div class="btn pink">Оплатить 1490 ₽</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="step-n">06</span><span class="step-t">Заказ с кнопкой отказа</span></div>
+      <p class="step-sub">Макет закреплён в заказе. Отказ доступен всегда, сумма зависит от стадии.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Заказ № 4471-2318</div>
+        <div class="scr">
+          <div class="alert good">Оплачено 1490 ₽</div>
+          <div class="img" style="height:54px">макет М-318</div>
+          <div class="steps4">
+            <div class="s4"><i>✓</i>Оплачен · макет М-318</div>
+            <div class="s4"><i>●</i>Ждёт печати</div>
+            <div class="s4"><i>○</i>Напечатан</div>
+            <div class="s4"><i>○</i>Готов к выдаче</div>
+          </div>
+          <div class="alert info">Печать ещё не началась: при отказе вернём 1290 ₽.</div>
+          <div class="btn ghost">Отказаться от заказа</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="step-n">07</span><span class="step-t">Отказ: сумма по разбивке</span></div>
+      <p class="step-sub">Договор подряда: удерживается то, что уже сделано.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Отказ от заказа 4471-2318</div>
+        <div class="scr">
+          <div class="ttl">Вы отказываетесь от изготовления</div>
+          <div class="tbl-mini">
+            <div><span>Стадия</span><b>печать не начата</b></div>
+            <div><span>Выполнено: работа над макетом</span><b>−200 ₽</b></div>
+            <div><span>Вернём</span><b>1290 ₽</b></div>
+          </div>
+          <div class="alert">После начала печати изделие уже персонализировано, и удерживается полная стоимость.</div>
+          <div class="txt">Суммы указаны для примера.</div>
+          <div class="row"><div class="btn ghost">Назад</div><div class="btn pink">Отказаться</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step key">
+      <div class="step-head"><span class="step-n">08</span><span class="step-t">Портал продавца: запись о согласовании</span></div>
+      <p class="step-sub">Только чтение. Продавец не может подменить макет. Поддержка видит то же.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Портал продавца · заказ 4471-2318</div>
+        <div class="scr">
+          <div class="row" style="gap:6px">
+            <div class="img" style="height:52px">макет М-318</div>
+            <div class="img" style="height:52px">исходник</div>
+          </div>
+          <div class="tbl-mini">
+            <div><span>Макет закреплён в чате</span><b>15.09 14:02</b></div>
+            <div><span>Подтверждён покупателем</span><b>15.09 14:10</b></div>
+            <div><span>Условия в чекауте</span><b>15.09 14:20</b></div>
+            <div><span>Оплачен</span><b>15.09 14:21</b></div>
+          </div>
+          <div class="alert info">Запись хранится на стороне площадки и используется при спорах.</div>
+          <div class="btn">Передать в печать</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="step-n">09</span><span class="step-t">Возврат после получения</span></div>
+      <p class="step-sub">Отдельный тип заявки: только брак или несоответствие макету.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Заявка на возврат</div>
+        <div class="scr">
+          <div class="ttl">Что не так с товаром?</div>
+          <div class="field filled">● Брак: дыры, пятна, отслоение печати</div>
+          <div class="field filled">○ Не соответствует макету М-318</div>
+          <div class="field" style="opacity:.6">Не подошёл размер (недоступно)</div>
+          <div class="field" style="opacity:.6">Передумал (недоступно)</div>
+          <div class="txt">Товар изготовлен по вашему макету, поэтому вернуть его надлежащего качества нельзя.</div>
+          <div class="btn pink">Приложить фото и отправить</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ---------- MVP продавец ---------- -->
+<section class="panel" id="p-ms" role="tabpanel" hidden>
+  <div class="intro">
+    <div>
+      <h2>MVP · путь продавца</h2>
+      <p style="margin-top:10px">Продавец работает в существующих портале и чате. Новых действий три: закрепить согласованный эскиз в чате, отметить начало печати (от этого зависит сумма при отказе) и вести заказ как обычный DBS. Новые карточки заводить не нужно.</p>
+    </div>
+    <div class="note"><b>Нагрузка.</b> Эскиз делают всем, а заказывают не все, и платного фильтра в MVP нет. Для 1–2 продавцов пилота это нормально, но долю «эскиз → заказ» и время на один макет нужно мерить с первого дня.</div>
+  </div>
+
+  <div class="rail">
+    <div class="step">
+      <div class="step-head"><span class="step-n">01</span><span class="step-t">Витринная карточка в портале</span></div>
+      <p class="step-sub">Признак POD ставит площадка вручную. Цена единая и разбита на части.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Портал продавца · карточка</div>
+        <div class="scr">
+          <div class="ttl">Футболка оверсайз с вашим принтом</div>
+          <div class="tbl-mini">
+            <div><span>Признак POD</span><b>включён площадкой</b></div>
+            <div><span>Цена</span><b>1490 ₽ · единая</b></div>
+            <div><span>в т.ч. изделие / нанесение / макет</span><b>690 / 600 / 200</b></div>
+            <div><span>Зона и размер принта</span><b>перёд, до А4</b></div>
+            <div><span>Оплата</span><b>только предоплата</b></div>
+          </div>
+          <div class="alert info">В MVP цену нельзя менять под конкретный макет. Если принт не помещается в рамки, продавец отказывает и называет причину.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="step-n">02</span><span class="step-t">Входящий запрос в чате</span></div>
+      <p class="step-sub">Покупатель пишет из карточки. Продавец отвечает по шаблону.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Чаты продавца · до заказа</div>
+        <div class="scr">
+          <div class="chatflow">
+            <div class="msg me" style="align-self:flex-start;background:var(--surface-2);color:var(--ink);border:1px solid var(--line)"><span class="who">Покупатель</span>Фото кота, надпись «БОСС». M, по груди 52 см<div class="img" style="height:34px;margin-top:5px">фото.jpg</div></div>
+          </div>
+          <div class="lbl">Шаблоны ответа</div>
+          <div class="field filled">Беру, пришлю эскиз в течение 24 ч</div>
+          <div class="field filled">Беру с оговоркой: низкое качество исходника</div>
+          <div class="field filled">Не беру, причина</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step key">
+      <div class="step-head"><span class="step-n">03</span><span class="step-t">Закрепить эскиз как макет</span></div>
+      <p class="step-sub">Действие на сообщении с эскизом. Цена подставляется из карточки и не меняется.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Чат · покупатель #8812</div>
+        <div class="scr">
+          <div class="img" style="height:62px">эскиз на футболке</div>
+          <div class="ttl">Закрепить как согласованный макет</div>
+          <div class="row"><div class="field filled">Размер: L</div><div class="field filled">Зона: перёд</div></div>
+          <div class="field filled" style="color:var(--ink-3)">Цена: 1490 ₽ · из карточки</div>
+          <div class="field filled" style="color:var(--ink-3)">Код: М-318 · присвоен автоматически</div>
+          <div class="txt">Покупатель получит макет с кнопкой «Подтвердить». Один макет на одну футболку.</div>
+          <div class="btn pink">Закрепить и отправить</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="step-n">04</span><span class="step-t">Покупатель подтвердил</span></div>
+      <p class="step-sub">Статус в списке чатов. Дальше покупатель оформляет сам.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Чаты продавца</div>
+        <div class="scr">
+          <div class="tbl-mini">
+            <div><span>#8812 · М-318</span><b>подтверждён · ждём оплату</b></div>
+            <div><span>#8790 · М-311</span><b>нужны правки</b></div>
+            <div><span>#8774 · М-305</span><b>оплачен</b></div>
+            <div><span>#8760 · М-299</span><b>истёк через 7 дней</b></div>
+          </div>
+          <div class="alert info">Правки после подтверждения создают новый макет М-318-2. Прежняя версия перестаёт действовать.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step key">
+      <div class="step-head"><span class="step-n">05</span><span class="step-t">Новый заказ с записью согласования</span></div>
+      <p class="step-sub">Макет пришёл вместе с заказом. Запись только для чтения, её используют при спорах.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Портал продавца · заказ 4471-2318</div>
+        <div class="scr">
+          <div class="row" style="gap:6px">
+            <div class="img" style="height:52px">макет М-318</div>
+            <div class="img" style="height:52px">исходник</div>
+          </div>
+          <div class="tbl-mini">
+            <div><span>Закреплён вами</span><b>15.09 14:02</b></div>
+            <div><span>Подтверждён покупателем</span><b>15.09 14:10</b></div>
+            <div><span>Оплачен</span><b>15.09 14:21</b></div>
+          </div>
+          <div class="btn">Передать в печать</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="step-n">06</span><span class="step-t">Отметка «Печать началась»</span></div>
+      <p class="step-sub">От этой отметки зависит, сколько вернётся покупателю при отказе.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Портал продавца · заказ 4471-2318</div>
+        <div class="scr">
+          <div class="steps4">
+            <div class="s4"><i>✓</i>Оплачен</div>
+            <div class="s4"><i>●</i>Ждёт печати</div>
+            <div class="s4"><i>○</i>Печать началась</div>
+            <div class="s4"><i>○</i>Отгружен по DBS</div>
+          </div>
+          <div class="tbl-mini">
+            <div><span>Отказ сейчас</span><b>вам 200 ₽ за макет</b></div>
+            <div><span>Отказ после отметки</span><b>вам 1490 ₽</b></div>
+          </div>
+          <div class="btn">Отметить: печать началась</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="step-n">07</span><span class="step-t">Отказ покупателя</span></div>
+      <p class="step-sub">Площадка делит деньги по разбивке и стадии.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Портал продавца · заказ 4471-2318</div>
+        <div class="scr">
+          <div class="alert">Покупатель отказался до начала печати</div>
+          <div class="tbl-mini">
+            <div><span>Покупателю</span><b>1290 ₽</b></div>
+            <div><span>Вам: работа над макетом</span><b>200 ₽ − комиссия</b></div>
+          </div>
+          <div class="txt">Если стадия отмечена неверно, спор решает поддержка по записи заказа.</div>
+          <div class="btn ghost">Подробнее о расчёте</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="step-n">08</span><span class="step-t">Отгрузка и выплата</span></div>
+      <p class="step-sub">Стандартный DBS: отгрузка, выдача, выплата за вычетом комиссии.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Портал продавца · финансы</div>
+        <div class="scr">
+          <div class="ttl">Заказ 4471-2318 · выдан</div>
+          <div class="tbl-mini">
+            <div><span>Изделие</span><b>690 ₽</b></div>
+            <div><span>Нанесение</span><b>600 ₽</b></div>
+            <div><span>Работа над макетом</span><b>200 ₽</b></div>
+            <div><span>Комиссия площадки</span><b>на всю сумму? · уточнить</b></div>
+          </div>
+          <div class="alert info">Возврат возможен только по браку или несоответствию макету. Спор решается по записи заказа.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ---------- Целевое покупатель ---------- -->
+<section class="panel" id="p-tb" role="tabpanel" hidden>
+  <div class="intro">
+    <div>
+      <h2>Целевое решение · путь покупателя</h2>
+      <p style="margin-top:10px">Покупатель собирает дизайн прямо в карточке: загружает фото или описывает идею для AI, выбирает опции и сразу видит превью и цену. Макет уходит продавцу на подтверждение. Оплата открывается только после подтверждения. Заказ создаётся из подтверждённого макета, поэтому купить «не то» невозможно.</p>
+    </div>
+    <div class="note"><b>Цена разная, но не сюрприз.</b> Итог считается по прайсу продавца ещё в конструкторе. Если продавец при подтверждении меняет цену, покупатель должен заново её принять, иначе заказ не создаётся.</div>
+  </div>
+
+  <div class="rail">
+    <div class="step key">
+      <div class="step-head"><span class="step-n">01</span><span class="step-t">Конструктор в карточке</span></div>
+      <p class="step-sub">Своё фото или AI по описанию. Опции из прайса продавца, цена пересчитывается сразу.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Карточка · конструктор</div>
+        <div class="scr">
+          <div class="img" style="height:78px">превью дизайна на футболке</div>
+          <div class="chips"><span class="chip on">Своё фото</span><span class="chip">Описать для AI</span></div>
+          <div class="lbl">Опции</div>
+          <div class="chips"><span class="chip on">Перёд</span><span class="chip">+ Спина</span></div>
+          <div class="chips"><span class="chip">А5</span><span class="chip on">А4</span><span class="chip">А3</span></div>
+          <div class="tbl-mini">
+            <div><span>Футболка</span><b>1490 ₽</b></div>
+            <div><span>Принт А4</span><b>+200 ₽</b></div>
+          </div>
+          <div class="btn pink">Отправить на согласование · 1690 ₽</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="step-n">02</span><span class="step-t">Подтверждение макета покупателем</span></div>
+      <p class="step-sub">Покупатель утверждает превью и параметры. Денег пока не списываем.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Ваш макет</div>
+        <div class="scr">
+          <div class="img" style="height:96px">превью М-318</div>
+          <div class="tbl-mini">
+            <div><span>Размер</span><b>L</b></div>
+            <div><span>Печать</span><b>перёд, А4</b></div>
+            <div><span>Предварительно</span><b>1690 ₽</b></div>
+          </div>
+          <div class="alert info">Продавец проверит, что макет можно напечатать. Оплата откроется после его подтверждения.</div>
+          <div class="btn pink">Отправить продавцу</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="step-n">03</span><span class="step-t">Ожидание и уточнения</span></div>
+      <p class="step-sub">Статус согласования. Чат нужен для вопросов, оформление идёт не через него.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Макет М-318 · на согласовании</div>
+        <div class="scr">
+          <div class="steps4">
+            <div class="s4"><i>✓</i>Отправлен продавцу</div>
+            <div class="s4"><i>●</i>Продавец проверяет · до 24 ч</div>
+            <div class="s4"><i>○</i>Оплата</div>
+          </div>
+          <div class="chatflow" style="flex:0 0 auto">
+            <div class="msg them"><span class="who">Продавец</span>Края фото обрежутся. Сдвинуть кота выше?</div>
+            <div class="msg me"><span class="who">Вы</span>Да, давайте</div>
+          </div>
+          <div class="btn ghost">Открыть чат</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step key">
+      <div class="step-head"><span class="step-n">04</span><span class="step-t">Продавец подтвердил</span></div>
+      <p class="step-sub">Если цена изменилась, видна причина, и покупатель принимает её заново.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Макет М-318 · подтверждён</div>
+        <div class="scr">
+          <div class="alert good">Продавец подтвердил макет</div>
+          <div class="img" style="height:60px">итоговый макет М-318</div>
+          <div class="tbl-mini">
+            <div><span>Было</span><b>1690 ₽</b></div>
+            <div><span>Доработка исходника</span><b>+300 ₽</b></div>
+            <div><span>Итого</span><b>1990 ₽</b></div>
+          </div>
+          <div class="txt">Причина: фото низкого разрешения, продавец перерисует контур.</div>
+          <div class="row"><div class="btn ghost">Отказаться</div><div class="btn pink">Принять и оплатить</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step key">
+      <div class="step-head"><span class="step-n">05</span><span class="step-t">Чекаут: разбивка цены и условия</span></div>
+      <p class="step-sub">Каждая строка цены видна. Отметка об условиях обязательна.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Оформление заказа</div>
+        <div class="scr">
+          <div class="row" style="gap:8px;align-items:center">
+            <div class="img" style="height:44px;flex:0 0 44px">М-318</div>
+            <div style="flex:1"><div class="ttl">Футболка по макету М-318</div><div class="txt">L · перёд, А4</div></div>
+          </div>
+          <div class="tbl-mini">
+            <div><span>Футболка</span><b>1490 ₽</b></div>
+            <div><span>Принт А4</span><b>200 ₽</b></div>
+            <div><span>Работа над макетом</span><b>300 ₽</b></div>
+            <div><span>Итого · предоплата</span><b>1990 ₽</b></div>
+          </div>
+          <div class="check"><span class="box">✓</span><span>Подтверждаю макет М-318. Изготовление на заказ: возврат при браке или несоответствии макету. При отказе удерживаются расходы продавца. <u>Оферта</u></span></div>
+          <div class="btn pink">Оплатить 1990 ₽</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="step-n">06</span><span class="step-t">Производство и отказ</span></div>
+      <p class="step-sub">Новые статусы производства. Сумма при отказе видна на каждой стадии.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Заказ № 5520-0091</div>
+        <div class="scr">
+          <div class="steps4">
+            <div class="s4"><i>✓</i>Оплачен</div>
+            <div class="s4"><i>✓</i>Передан в работу</div>
+            <div class="s4"><i>●</i>Печатается</div>
+            <div class="s4"><i>○</i>Передан в доставку</div>
+          </div>
+          <div class="tbl-mini">
+            <div><span>Отказ сейчас</span><b>удержание по стадии</b></div>
+            <div><span>Работа над макетом</span><b>не возвращается</b></div>
+          </div>
+          <div class="btn ghost">Отказаться от заказа</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="step-n">07</span><span class="step-t">Получение и возврат</span></div>
+      <p class="step-sub">Выдача в ПВЗ. Возврат как в MVP: только брак или несоответствие макету.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>Заявка на возврат</div>
+        <div class="scr">
+          <div class="img" style="height:56px">макет М-318 для сравнения</div>
+          <div class="field filled">● Брак</div>
+          <div class="field filled">○ Не соответствует макету</div>
+          <div class="field" style="opacity:.6">Передумал (недоступно)</div>
+          <div class="btn pink">Приложить фото и отправить</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ---------- Целевое продавец ---------- -->
+<section class="panel" id="p-ts" role="tabpanel" hidden>
+  <div class="intro">
+    <div>
+      <h2>Целевое решение · путь продавца</h2>
+      <p style="margin-top:10px">Продавец настраивает прайс персонализации один раз, а потом работает с готовыми макетами в ЛК: проверяет, подтверждает, при необходимости меняет цену с обоснованием. Зарабатывает на изделии, платных опциях печати и работе над макетом. Всё это видно покупателю до оплаты.</p>
+    </div>
+  </div>
+
+  <div class="rail">
+    <div class="step key">
+      <div class="step-head"><span class="step-n">01</span><span class="step-t">Прайс персонализации</span></div>
+      <p class="step-sub">База, опции печати и услуги. Площадка задаёт рамки, продавец задаёт цены.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>ЛК продавца · прайс POD</div>
+        <div class="scr">
+          <div class="tbl-mini">
+            <div><span>Футболка, база</span><b>1490 ₽</b></div>
+            <div><span>Принт А4 / А3</span><b>+200 / +450 ₽</b></div>
+            <div><span>Вторая зона: спина</span><b>+400 ₽</b></div>
+            <div><span>Работа над макетом</span><b>+300 ₽</b></div>
+            <div><span>Срочно, 1 день</span><b>+250 ₽</b></div>
+          </div>
+          <div class="alert info">Цены видны покупателю в конструкторе. Изменить цену конкретного заказа можно только с обоснованием и согласием покупателя.</div>
+          <div class="btn">Сохранить прайс</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step key">
+      <div class="step-head"><span class="step-n">02</span><span class="step-t">Макет на согласовании</span></div>
+      <p class="step-sub">Макет приходит в ЛК с автоматической проверкой качества.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>ЛК продавца · макет М-318</div>
+        <div class="scr">
+          <div class="row" style="gap:6px">
+            <div class="img" style="height:60px">превью</div>
+            <div class="img" style="height:60px">исходник</div>
+          </div>
+          <div class="tbl-mini">
+            <div><span>Разрешение</span><b>900×900 · низкое</b></div>
+            <div><span>Опции</span><b>L · перёд, А4</b></div>
+            <div><span>Цена по прайсу</span><b>1690 ₽</b></div>
+            <div><span>Ответить до</span><b>16.09 14:00</b></div>
+          </div>
+          <div class="btn pink">Подтвердить</div>
+          <div class="row"><div class="btn ghost">Изменить цену</div><div class="btn ghost">Отклонить</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="step-n">03</span><span class="step-t">Подтверждение с доплатой</span></div>
+      <p class="step-sub">Только позиции из прайса и обязательная причина. Покупатель принимает заново.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>ЛК продавца · изменить цену</div>
+        <div class="scr">
+          <div class="lbl">Добавить из прайса</div>
+          <div class="field filled">● Работа над макетом · +300 ₽</div>
+          <div class="field">○ Срочно, 1 день · +250 ₽</div>
+          <div class="field filled">Причина: низкое разрешение, перерисую контур</div>
+          <div class="tbl-mini"><div><span>Новая цена</span><b>1990 ₽</b></div></div>
+          <div class="btn pink">Отправить покупателю</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step key">
+      <div class="step-head"><span class="step-n">04</span><span class="step-t">Оплаченный заказ и запись</span></div>
+      <p class="step-sub">Запись только для чтения: макет, версии цены, все подтверждения.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>ЛК продавца · заказ 5520-0091</div>
+        <div class="scr">
+          <div class="img" style="height:50px">макет М-318 · итоговый</div>
+          <div class="tbl-mini">
+            <div><span>Макет утверждён покупателем</span><b>15.09 13:40</b></div>
+            <div><span>Подтверждён вами</span><b>15.09 16:05</b></div>
+            <div><span>Цена 1990 ₽ принята</span><b>15.09 16:30</b></div>
+            <div><span>Оплачен</span><b>15.09 16:31</b></div>
+          </div>
+          <div class="btn">Передать в работу</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="step-n">05</span><span class="step-t">Статусы производства</span></div>
+      <p class="step-sub">Продавец ведёт заказ по стадиям. От стадии зависит удержание при отказе.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>ЛК продавца · заказ 5520-0091</div>
+        <div class="scr">
+          <div class="steps4">
+            <div class="s4"><i>✓</i>Передан в работу</div>
+            <div class="s4"><i>●</i>Печатается</div>
+            <div class="s4"><i>○</i>Готов к отгрузке</div>
+            <div class="s4"><i>○</i>Передан в СЦ / ПВЗ</div>
+          </div>
+          <div class="alert">При отказе на этой стадии покупателю вернётся сумма за вычетом расходов по правилам площадки.</div>
+          <div class="btn">Отметить: напечатан</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="step-n">06</span><span class="step-t">Выплата: на чём заработал</span></div>
+      <p class="step-sub">Разбивка по изделию, опциям и услугам.</p>
+      <div class="phone">
+        <div class="chrome"><span class="dot"></span>ЛК продавца · финансы</div>
+        <div class="scr">
+          <div class="ttl">Заказ 5520-0091 · выдан</div>
+          <div class="tbl-mini">
+            <div><span>Футболка</span><b>1490 ₽</b></div>
+            <div><span>Опция: принт А4</span><b>200 ₽</b></div>
+            <div><span>Услуга: работа над макетом</span><b>300 ₽</b></div>
+            <div><span>Комиссия площадки</span><b>уточнить для услуг</b></div>
+          </div>
+          <div class="alert info">При отказе покупателя после подтверждения работа над макетом выплачивается продавцу.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<footer>Макеты схематичные: они показывают логику и тексты, а не финальный дизайн. Цены и суммы указаны для примера.</footer>
+</div>
+<script>
+(function(){
+  var tabs=[].slice.call(document.querySelectorAll('.tab'));
+  var ids=['mb','ms','tb','ts'];
+  tabs.forEach(function(t){
+    t.addEventListener('click',function(){
+      tabs.forEach(function(x){x.setAttribute('aria-selected', x===t?'true':'false');});
+      ids.forEach(function(k){document.getElementById('p-'+k).hidden=(k!==t.dataset.p);});
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
