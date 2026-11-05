@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Print on Demand: концепция</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -264,40 +264,11 @@ footer{margin-top:56px;padding-top:22px;border-top:1px solid var(--line);font-si
 .gate b{color:inherit}
 </style>
 <style>body{background:var(--paper)}</style>
+
 </head>
-<body style="margin:0">
+<body>
 <div class="wrap">
-<header>
-  <p class="eyebrow">Print on Demand · одежда · футболка</p>
-  <h1>MVP и целевое решение</h1>
-  <p class="lede">Два этапа одного продукта. MVP запускаем на одной футболке и 1–2 продавцах, чтобы проверить, что покупатели оформляют персонализированные заказы внутри площадки. Целевое решение масштабирует это в сервис: дизайн собирается в карточке, а цена зависит от выбранных опций.</p>
-</header>
-
-<div class="sec">
-  <p class="eyebrow">Сравнение</p>
-  <h2>Чем отличаются два решения</h2>
-  <div class="tbl-wrap" style="border:1px solid var(--line);border-radius:12px;background:var(--surface)">
-    <table>
-      <thead><tr><th></th><th>MVP</th><th>Целевое решение</th></tr></thead>
-      <tbody>
-        <tr><td>Задача</td><td>Проверить, что покупатели и продавцы доходят до заказа внутри площадки</td><td>Масштабировать персонализацию как сервис площадки</td></tr>
-        <tr><td>Где создаётся дизайн</td><td>Покупатель присылает фото в чат, продавец делает эскиз</td><td>В карточке: своё фото или AI по описанию, превью на товаре</td></tr>
-        <tr><td>Согласование</td><td>В чате до заказа</td><td>Макет уходит в ЛК продавца, продавец подтверждает производимость</td></tr>
-        <tr><td>Как макет связан с заказом</td><td>Макет закреплён в чате и подтверждён покупателем, сам прикрепляется к позиции в корзине</td><td>Заказ создаётся из подтверждённого макета, другого пути нет</td></tr>
-        <tr><td>Цена</td><td><b>Единая, 1490 ₽</b>, разложена на изделие, нанесение и макет. Зона, размер принта и форматы ограничены</td><td><b>По прайсу продавца</b>: база + опции + услуги. Итог виден до оплаты</td></tr>
-        <tr><td>На чём зарабатывает продавец</td><td>Маржа в единой цене</td><td>Маржа на изделии, платные опции печати, разработка макета, срочность</td></tr>
-        <tr><td>Чат</td><td>Основной канал согласования</td><td>Для уточнений, не для оформления</td></tr>
-        </tbody>
-    </table>
-  </div>
-  
-</div>
-
-<div class="sec">
-  <p class="eyebrow">Макеты</p>
-  <h2>Путь покупателя и путь продавца</h2>
-  <p class="lead">Экраны листаются вбок. Вкладки переключают решение и роль.</p>
-</div>
+<header><h1>MVP и целевое решение</h1></header>
 <div class="tabs" role="tablist">
   <button class="tab" role="tab" aria-selected="true" data-p="mb">MVP · ПОКУПАТЕЛЬ</button>
   <button class="tab" role="tab" aria-selected="false" data-p="ms">MVP · ПРОДАВЕЦ</button>
@@ -306,12 +277,7 @@ footer{margin-top:56px;padding-top:22px;border-top:1px solid var(--line);font-si
 </div>
 
 <section class="panel" id="p-mb" role="tabpanel">
-  <div class="intro">
-    <div>
-      <h2>MVP · путь покупателя</h2>
-      <p style="margin-top:10px">Согласование идёт в чате до заказа. Когда эскиз готов, продавец закрепляет его в чате как согласованный макет, и покупатель подтверждает его одной кнопкой. Покупатель кладёт в корзину обычную карточку, а закреплённый макет автоматически прикрепляется к позиции. В чекауте видны макет и разбивка цены. Без подтверждённого макета POD-позицию оформить нельзя. Новых карточек и модерации нет, цена единая: 1490 ₽.</p>
-    </div>
-  </div>
+  <div class="intro"><h2>MVP · путь покупателя</h2></div>
 
   <div class="rail">
     <div class="step">
@@ -492,13 +458,7 @@ footer{margin-top:56px;padding-top:22px;border-top:1px solid var(--line);font-si
 
 <!-- ---------- MVP продавец ---------- -->
 <section class="panel" id="p-ms" role="tabpanel" hidden>
-  <div class="intro">
-    <div>
-      <h2>MVP · путь продавца</h2>
-      <p style="margin-top:10px">Продавец работает в существующих портале и чате. Новых действий три: закрепить согласованный эскиз в чате, отметить начало печати (от этого зависит сумма при отказе) и вести заказ как обычный DBS. Новые карточки заводить не нужно.</p>
-    </div>
-    <div class="note"><b>Нагрузка.</b> Эскиз делают всем, а заказывают не все, и платного фильтра в MVP нет. Для 1–2 продавцов пилота это нормально, но долю «эскиз → заказ» и время на один макет нужно мерить с первого дня.</div>
-  </div>
+  <div class="intro"><h2>MVP · путь продавца</h2></div>
 
   <div class="rail">
     <div class="step">
@@ -651,13 +611,7 @@ footer{margin-top:56px;padding-top:22px;border-top:1px solid var(--line);font-si
 
 <!-- ---------- Целевое покупатель ---------- -->
 <section class="panel" id="p-tb" role="tabpanel" hidden>
-  <div class="intro">
-    <div>
-      <h2>Целевое решение · путь покупателя</h2>
-      <p style="margin-top:10px">Покупатель собирает дизайн прямо в карточке: загружает фото или описывает идею для AI, выбирает опции и сразу видит превью и цену. Макет уходит продавцу на подтверждение. Оплата открывается только после подтверждения. Заказ создаётся из подтверждённого макета, поэтому купить «не то» невозможно.</p>
-    </div>
-    <div class="note"><b>Цена разная, но не сюрприз.</b> Итог считается по прайсу продавца ещё в конструкторе. Если продавец при подтверждении меняет цену, покупатель должен заново её принять, иначе заказ не создаётся.</div>
-  </div>
+  <div class="intro"><h2>Целевое решение · путь покупателя</h2></div>
 
   <div class="rail">
     <div class="step key">
@@ -799,12 +753,7 @@ footer{margin-top:56px;padding-top:22px;border-top:1px solid var(--line);font-si
 
 <!-- ---------- Целевое продавец ---------- -->
 <section class="panel" id="p-ts" role="tabpanel" hidden>
-  <div class="intro">
-    <div>
-      <h2>Целевое решение · путь продавца</h2>
-      <p style="margin-top:10px">Продавец настраивает прайс персонализации один раз, а потом работает с готовыми макетами в ЛК: проверяет, подтверждает, при необходимости меняет цену с обоснованием. Зарабатывает на изделии, платных опциях печати и работе над макетом. Всё это видно покупателю до оплаты.</p>
-    </div>
-  </div>
+  <div class="intro"><h2>Целевое решение · путь продавца</h2></div>
 
   <div class="rail">
     <div class="step key">
@@ -921,7 +870,6 @@ footer{margin-top:56px;padding-top:22px;border-top:1px solid var(--line);font-si
 </section>
 
 
-<footer>Макеты схематичные: они показывают логику и тексты, а не финальный дизайн. Цены и суммы указаны для примера.</footer>
 </div>
 <script>
 (function(){
